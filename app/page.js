@@ -1,5 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { resolveLocation } from "@/lib/locations";
 
 const SCENTS = [
   {
@@ -31,7 +33,11 @@ const SCENTS = [
   },
 ];
 
-export default function SurveyPage() {
+function SurveyForm() {
+  const searchParams = useSearchParams();
+  const locSlug = searchParams.get("loc");
+  const locationMeta = resolveLocation(locSlug);
+
   const [selectedScent, setSelectedScent] = useState("Summer Rain");
   const [fullName, setFullName] = useState("");
   const [age, setAge] = useState("");
@@ -56,6 +62,7 @@ export default function SurveyPage() {
           full_name: fullName.trim(),
           age: parseInt(age),
           favorite_scent: selectedScent,
+          location: locSlug,
         }),
       });
       const data = await res.json();
@@ -123,13 +130,22 @@ export default function SurveyPage() {
         <div className="max-w-xl mx-auto px-6 py-12">
 
           {/* Amuco Logo */}
-          <div className="flex justify-center mb-12">
+          <div className="flex flex-col items-center mb-12 gap-3">
             <div
               className="p-3 rounded-xl"
               style={{ backgroundColor: "white", boxShadow: "0 0 40px rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}
             >
               <img src="/amuco-logo.jpg" alt="AMUCO 600" className="h-10 w-auto object-contain" />
             </div>
+            {locationMeta && (
+              <div
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold"
+                style={{ backgroundColor: "rgba(184,245,104,0.1)", border: "1px solid rgba(184,245,104,0.2)", color: "#b8f568" }}
+              >
+                <span className="material-symbols-outlined text-sm">location_on</span>
+                {locationMeta.name} · {locationMeta.area}
+              </div>
+            )}
           </div>
 
           {/* Progress */}
@@ -332,5 +348,13 @@ export default function SurveyPage() {
         </button>
       </nav>
     </div>
+  );
+}
+
+export default function SurveyPage() {
+  return (
+    <Suspense fallback={<div style={{ backgroundColor: "#0e1111", minHeight: "100vh" }} />}>
+      <SurveyForm />
+    </Suspense>
   );
 }

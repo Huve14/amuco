@@ -1,12 +1,16 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { LOCATIONS } from "@/lib/locations";
 
 const SCENT_META = {
   "Summer Rain":                   { emoji: "🌧️", color: "#60a5fa", bg: "rgba(96,165,250,0.15)" },
   "Shishanyama":                   { emoji: "🔥", color: "#fd9924", bg: "rgba(253,153,36,0.15)" },
   "Your mom is cooking briyani":   { emoji: "🍛", color: "#b8f568", bg: "rgba(184,245,104,0.15)" },
 };
+
+const RANK_ICONS = ["emoji_events", "workspace_premium", "military_tech"];
+const RANK_COLORS = ["#fbbf24", "#94a3b8", "#cd7c2f"];
 
 function KpiCard({ icon, label, value, sub, accent }) {
   return (
@@ -83,14 +87,81 @@ function SparkBar({ label, count, max }) {
   );
 }
 
+function LocationCard({ loc, rank }) {
+  const rankIcon = RANK_ICONS[rank];
+  const rankColor = RANK_COLORS[rank] || "#c2c9b3";
+  const leadingMeta = loc.leadingScent ? SCENT_META[loc.leadingScent] : null;
+
+  return (
+    <div
+      className="rounded-2xl p-5 flex flex-col gap-3 relative overflow-hidden"
+      style={{
+        backgroundColor: "#111414",
+        border: rank === 0 ? "1px solid rgba(251,191,36,0.3)" : "1px solid rgba(255,255,255,0.07)",
+        boxShadow: rank === 0 ? "0 0 24px rgba(251,191,36,0.08)" : "none",
+      }}
+    >
+      {/* Rank badge */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          {rankIcon && (
+            <span className="material-symbols-outlined text-base" style={{ color: rankColor }}>{rankIcon}</span>
+          )}
+          <span className="text-xs font-black uppercase tracking-wider" style={{ color: rankColor }}>
+            #{rank + 1}
+          </span>
+        </div>
+        {loc.isLive ? (
+          <div className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ backgroundColor: "rgba(184,245,104,0.12)" }}>
+            <div className="w-1.5 h-1.5 rounded-full bg-[#b8f568] animate-pulse" />
+            <span className="text-[10px] font-bold" style={{ color: "#b8f568" }}>LIVE</span>
+          </div>
+        ) : (
+          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: "rgba(255,255,255,0.05)", color: "#c2c9b3" }}>
+            UPCOMING
+          </span>
+        )}
+      </div>
+
+      {/* Location info */}
+      <div>
+        <p className="font-black text-white text-base leading-tight">{loc.name}</p>
+        <p className="text-xs mt-0.5" style={{ color: "#c2c9b3" }}>{loc.area}</p>
+      </div>
+
+      {/* Stats */}
+      <div className="flex items-end justify-between mt-auto pt-1">
+        <div>
+          <p className="text-3xl font-black text-white tracking-tight">{loc.total}</p>
+          <p className="text-[10px] uppercase tracking-wider" style={{ color: "#c2c9b3" }}>
+            responses · {loc.todayCount} today
+          </p>
+        </div>
+        {leadingMeta && (
+          <div
+            className="px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1"
+            style={{ backgroundColor: leadingMeta.color + "18", color: leadingMeta.color }}
+          >
+            <span>{leadingMeta.emoji}</span>
+            <span className="hidden sm:inline truncate max-w-[80px]">{loc.leadingScent}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(false);
+  const [activeTab, setActiveTab] = useState(null); // null = All Locations
   const router = useRouter();
 
-  useEffect(() => {
-    fetch("/api/admin/stats")
+  const fetchStats = useCallback((locationSlug) => {
+    setLoading(true);
+    const url = locationSlug ? `/api/admin/stats?location=${locationSlug}` : "/api/admin/stats";
+    fetch(url)
       .then((r) => {
         if (r.status === 401) { setAuthError(true); setLoading(false); return null; }
         return r.json();
@@ -98,6 +169,10 @@ export default function AdminDashboard() {
       .then((d) => { if (d) { setStats(d); setLoading(false); } })
       .catch(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    fetchStats(activeTab);
+  }, [activeTab, fetchStats]);
 
   async function handleLogout() {
     await fetch("/api/admin/login", { method: "DELETE" });
@@ -134,6 +209,7 @@ export default function AdminDashboard() {
   const dayEntries = Object.entries(stats.byDay);
   const maxDay = Math.max(...dayEntries.map(([, v]) => v), 1);
   const leadingMeta = SCENT_META[stats.leadingScent] || { emoji: "🫧", color: "#b8f568" };
+  const locationList = stats.locationStats || [];
 
   return (
     <div className="min-h-screen pb-16" style={{ backgroundColor: "#0e1111" }}>
@@ -177,9 +253,53 @@ export default function AdminDashboard() {
           <h1 className="text-3xl font-black text-white tracking-tight">Scent <span style={{ color: "#b8f568", fontStyle: "italic" }}>Analytics</span></h1>
         </div>
 
+        {/* Location Leaderboard */}
+        <div>
+          <div className="flex items-center gap-3 mb-4">
+            <h2 className="text-xs font-bold uppercase tracking-[0.25em]" style={{ color: "#fd9924" }}>
+              Location Leaderboard
+            </h2>
+            <div className="h-px flex-grow" style={{ backgroundColor: "rgba(255,255,255,0.06)" }} />
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {locationList.map((loc, i) => (
+              <LocationCard key={loc.slug} loc={loc} rank={i} />
+            ))}
+          </div>
+        </div>
+
+        {/* Location Filter Tabs */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            onClick={() => setActiveTab(null)}
+            className="px-4 py-2 rounded-xl text-xs font-bold transition-all"
+            style={
+              activeTab === null
+                ? { backgroundColor: "#b8f568", color: "#112000" }
+                : { backgroundColor: "rgba(255,255,255,0.05)", color: "#c2c9b3", border: "1px solid rgba(255,255,255,0.08)" }
+            }
+          >
+            All Locations
+          </button>
+          {Object.entries(LOCATIONS).map(([slug, meta]) => (
+            <button
+              key={slug}
+              onClick={() => setActiveTab(slug)}
+              className="px-4 py-2 rounded-xl text-xs font-bold transition-all"
+              style={
+                activeTab === slug
+                  ? { backgroundColor: "#b8f568", color: "#112000" }
+                  : { backgroundColor: "rgba(255,255,255,0.05)", color: "#c2c9b3", border: "1px solid rgba(255,255,255,0.08)" }
+              }
+            >
+              {meta.name}
+            </button>
+          ))}
+        </div>
+
         {/* KPI Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <KpiCard icon="group" label="Total Responses" value={stats.total} sub="All time" accent="#b8f568" />
+          <KpiCard icon="group" label="Total Responses" value={stats.total} sub={activeTab ? LOCATIONS[activeTab]?.name : "All locations"} accent="#b8f568" />
           <KpiCard icon="today" label="Today" value={stats.todayCount} sub="New submissions" accent="#fd9924" />
           <KpiCard icon="person" label="Avg. Age" value={stats.avgAge > 0 ? stats.avgAge : "—"} sub="Years old" accent="#60a5fa" />
           <KpiCard
@@ -289,7 +409,7 @@ export default function AdminDashboard() {
               <table className="w-full text-sm">
                 <thead>
                   <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                    {["Name", "Age", "Scent", "Submitted"].map((h) => (
+                    {["Name", "Age", "Scent", "Location", "Submitted"].map((h) => (
                       <th key={h} className="text-left px-6 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: "#c2c9b3" }}>
                         {h}
                       </th>
@@ -299,6 +419,7 @@ export default function AdminDashboard() {
                 <tbody>
                   {stats.recent.map((r) => {
                     const meta = SCENT_META[r.favorite_scent] || { emoji: "🫧", color: "#b8f568" };
+                    const locMeta = r.location ? LOCATIONS[r.location] : null;
                     return (
                       <tr key={r.id} className="transition-colors" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
                         onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.03)")}
@@ -313,6 +434,19 @@ export default function AdminDashboard() {
                           >
                             {meta.emoji} {r.favorite_scent}
                           </span>
+                        </td>
+                        <td className="px-6 py-3.5">
+                          {locMeta ? (
+                            <span
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
+                              style={{ backgroundColor: "rgba(184,245,104,0.08)", color: "#b8f568", border: "1px solid rgba(184,245,104,0.15)" }}
+                            >
+                              <span className="material-symbols-outlined text-xs">location_on</span>
+                              {locMeta.name}
+                            </span>
+                          ) : (
+                            <span className="text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>—</span>
+                          )}
                         </td>
                         <td className="px-6 py-3.5 text-xs" style={{ color: "#c2c9b3" }}>
                           {new Date(r.created_at).toLocaleDateString("en-ZA", {

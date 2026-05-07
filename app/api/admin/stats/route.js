@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import crypto from "crypto";
 import { supabase } from "@/lib/supabase";
+import { LOCATIONS } from "@/lib/locations";
 
 const VALID_SCENTS = ["Summer Rain", "Shishanyama", "Your mom is cooking briyani"];
 
@@ -18,25 +19,12 @@ async function isAuthenticated() {
   return session?.value === getSessionToken();
 }
 
-export async function GET() {
-  if (!(await isAuthenticated())) {
-    return Response.json({ error: "Unauthorized." }, { status: 401 });
-  }
-
-  const { data, error } = await supabase
-    .from("participants")
-    .select("*")
-    .order("created_at", { ascending: true });
-
-  if (error) return Response.json({ error: "Failed to fetch data." }, { status: 500 });
-
+function buildStats(data, today) {
   const total = data.length;
 
-  // Scent tally
   const scentTally = VALID_SCENTS.reduce((acc, s) => ({ ...acc, [s]: 0 }), {});
   data.forEach((r) => { if (scentTally[r.favorite_scent] !== undefined) scentTally[r.favorite_scent]++; });
 
-  // Age distribution
   const ageBuckets = { "Under 18": 0, "18–24": 0, "25–34": 0, "35–44": 0, "45+": 0 };
   data.forEach((r) => {
     const a = r.age;
@@ -47,16 +35,12 @@ export async function GET() {
     else ageBuckets["45+"]++;
   });
 
-  // Average age
   const avgAge = total > 0
     ? Math.round(data.reduce((sum, r) => sum + (r.age || 0), 0) / total)
     : 0;
 
-  // Today's responses
-  const today = new Date().toDateString();
   const todayCount = data.filter((r) => new Date(r.created_at).toDateString() === today).length;
 
-  // Responses by day (last 14 days)
   const byDay = {};
   for (let i = 13; i >= 0; i--) {
     const d = new Date();
@@ -68,20 +52,46 @@ export async function GET() {
     if (label in byDay) byDay[label]++;
   });
 
-  // Leading scent
   const leadingScent = Object.entries(scentTally).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
+  const recent = [...data].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 20);
 
-  // Recent 20
-  const recent = [...data].reverse().slice(0, 20);
+  return { total, avgAge, todayCount, leadingScent, scentTally, ageBuckets, byDay, recent };
+}
 
-  return Response.json({
-    total,
-    avgAge,
-    todayCount,
-    leadingScent,
-    scentTally,
-    ageBuckets,
-    byDay,
-    recent,
-  });
+export async function GET(req) {
+  if (!(await isAuthenticated())) {
+    return Response.json({ error: "Unauthorized." }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(req.url);
+  const locationFilter = searchParams.get("location");
+
+  const { data: allData, error } = await supabase
+    .from("participants")
+    .select("*")
+    .order("created_at", { ascending: true });
+
+  if (error) return Response.json({ error: "Failed to fetch data." }, { status: 500 });
+
+  const today = new Date().toDateString();
+
+  // Filter data if location tab selected
+  const filteredData = locationFilter && LOCATIONS[locationFilter]
+    ? allData.filter((r) => r.location === locationFilter)
+    : allData;
+
+  const mainStats = buildStats(filteredData, today);
+
+  // Per-location leaderboard (always uses all data)
+  const locationStats = Object.entries(LOCATIONS).map(([slug, meta]) => {
+    const rows = allData.filter((r) => r.location === slug);
+    const scentTally = VALID_SCENTS.reduce((acc, s) => ({ ...acc, [s]: 0 }), {});
+    rows.forEach((r) => { if (scentTally[r.favorite_scent] !== undefined) scentTally[r.favorite_scent]++; });
+    const leadingScent = Object.entries(scentTally).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
+    const todayCount = rows.filter((r) => new Date(r.created_at).toDateString() === today).length;
+    const isLive = new Date(meta.launch) <= new Date();
+    return { slug, ...meta, total: rows.length, todayCount, leadingScent, scentTally, isLive };
+  }).sort((a, b) => b.total - a.total);
+
+  return Response.json({ ...mainStats, locationStats, activeFilter: locationFilter || null });
 }
