@@ -1,10 +1,12 @@
 import { cookies } from "next/headers";
 import crypto from "crypto";
 
+const ADMIN_PWD = process.env.ADMIN_PASSWORD?.trim();
+
 function getSessionToken() {
   return crypto
     .createHash("sha256")
-    .update("amuco-admin::" + process.env.ADMIN_PASSWORD)
+    .update("amuco-admin::" + ADMIN_PWD)
     .digest("hex");
 }
 
@@ -12,11 +14,11 @@ export async function POST(req) {
   try {
     const { password } = await req.json();
 
-    if (!process.env.ADMIN_PASSWORD) {
+    if (!ADMIN_PWD) {
       return Response.json({ error: "Admin not configured." }, { status: 500 });
     }
 
-    if (!password || password !== process.env.ADMIN_PASSWORD) {
+    if (!password || password.trim() !== ADMIN_PWD) {
       // Small delay to slow brute force
       await new Promise((r) => setTimeout(r, 400));
       return Response.json({ error: "Incorrect password." }, { status: 401 });

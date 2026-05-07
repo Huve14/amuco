@@ -7,7 +7,7 @@ const VALID_SCENTS = ["Summer Rain", "Shishanyama", "Your mom is cooking briyani
 function getSessionToken() {
   return crypto
     .createHash("sha256")
-    .update("amuco-admin::" + process.env.ADMIN_PASSWORD)
+    .update("amuco-admin::" + process.env.ADMIN_PASSWORD?.trim())
     .digest("hex");
 }
 
