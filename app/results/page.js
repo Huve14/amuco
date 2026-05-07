@@ -41,7 +41,10 @@ export default function ResultsPage() {
     <div className="min-h-screen bg-[#0c0c0c] text-white px-6 py-16">
       <div className="max-w-2xl mx-auto">
         <div className="mb-12">
-          <p className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-3">Amuco Survey · Results</p>
+          <div className="flex mb-5">
+            <img src="/amuco-logo.jpg" alt="Amuco 600" className="h-10 w-auto object-contain" />
+          </div>
+          <p className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-3">Survey · Results</p>
           <h1 className="text-3xl font-bold mb-2">What does SA smell like?</h1>
           <p className="text-gray-400">{total} response{total !== 1 ? "s" : ""} so far</p>
         </div>

@@ -94,7 +94,13 @@ export default function SurveyPage() {
   return (
     <div className="min-h-screen bg-[#0c0c0c] text-white">
       <div className="max-w-2xl mx-auto px-6 pt-16 pb-10 text-center">
-        <p className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-4 font-medium">Amuco × M2M</p>
+        <div className="flex justify-center mb-8">
+          <img
+            src="/amuco-logo.jpg"
+            alt="Amuco 600"
+            className="h-16 md:h-20 w-auto object-contain"
+          />
+        </div>
         <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4">
           What does your SA<br />smell like?
         </h1>
