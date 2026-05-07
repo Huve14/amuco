@@ -160,7 +160,7 @@ export default function SurveyPage() {
           </section>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-12">
+          <form id="survey-form" onSubmit={handleSubmit} className="space-y-12">
 
             {/* Name + Age — floating label inputs */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -308,18 +308,19 @@ export default function SurveyPage() {
         </div>
       </main>
 
-      {/* Bottom Navigation */}
+      {/* Bottom Navigation — Activate only */}
       <nav
-        className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-4 rounded-t-[32px]"
+        className="fixed bottom-0 left-0 w-full z-50 flex justify-center items-center px-4 py-4 rounded-t-[32px]"
         style={{
           backgroundColor: "rgba(14,17,17,0.92)",
           backdropFilter: "blur(20px)",
           borderTop: "1px solid rgba(255,255,255,0.05)",
         }}
       >
-        <a
-          href="#"
-          className="flex flex-col items-center justify-center rounded-2xl px-8 py-3 transition-all active:scale-90"
+        <button
+          type="submit"
+          form="survey-form"
+          className="flex flex-col items-center justify-center rounded-2xl px-10 py-3 transition-all active:scale-90"
           style={{
             backgroundColor: "#b8f568",
             color: "#112000",
@@ -328,23 +329,7 @@ export default function SurveyPage() {
         >
           <span className="material-symbols-outlined mb-0.5">bolt</span>
           <span className="text-[10px] font-bold uppercase tracking-wider">Activate</span>
-        </a>
-        <a
-          href="/results"
-          className="flex flex-col items-center justify-center px-6 py-2 transition-all active:scale-90 hover:text-white"
-          style={{ color: "#c2c9b3" }}
-        >
-          <span className="material-symbols-outlined mb-0.5">analytics</span>
-          <span className="text-[10px] font-bold uppercase tracking-wider">Vibes</span>
-        </a>
-        <a
-          href="#"
-          className="flex flex-col items-center justify-center px-6 py-2 transition-all active:scale-90 hover:text-white"
-          style={{ color: "#c2c9b3" }}
-        >
-          <span className="material-symbols-outlined mb-0.5">settings</span>
-          <span className="text-[10px] font-bold uppercase tracking-wider">Config</span>
-        </a>
+        </button>
       </nav>
     </div>
   );
