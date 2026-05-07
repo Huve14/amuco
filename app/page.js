@@ -4,87 +4,96 @@ import { useState } from "react";
 const SCENTS = [
   {
     id: "Summer Rain",
-    emoji: "🌧️",
     label: "Summer Rain",
-    description: "That first drop hitting hot concrete. Cool, earthy, electric.",
-    palette: "from-blue-900 to-slate-800",
-    border: "border-blue-500",
-    ring: "ring-blue-400",
-    badge: "bg-blue-500/20 text-blue-300",
+    description: "The crisp electric smell of asphalt meeting afternoon rain.",
+    icon: "water_drop",
+    iconColor: "text-[#b8f568]",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDBZwutAiknR_w1mZYmSehVM7dENUxD95KZyifuGAAk6rrayNxXgSYW4_WboG14fwKr3QwYu98RzFcV_4rY4Fo2T111TIhZhyDlhOTbebwhz_BeoMv0X4KlyP8P42dUg8ShUGJ6YvSJCXdaU4eNk6lbYS_F2uX8nmYoIBEyDWK3i4s9EJ5G_2-gDk_aSIq3cKbFnVHdMmXA7C5FNoGqn6Cx1KnKxiSv6pUbG9CPSq_DmA-rs7cY4T8a58eR98sYBfwwTcfzsbxDZdI",
   },
   {
     id: "Shishanyama",
-    emoji: "🔥",
     label: "Shishanyama",
-    description: "Smoke, char, and braai vibes. The smell of a Friday done right.",
-    palette: "from-orange-900 to-red-900",
-    border: "border-orange-500",
-    ring: "ring-orange-400",
-    badge: "bg-orange-500/20 text-orange-300",
+    description: "Smoky woodfire, charcoal, and the soul of a community fire.",
+    icon: "local_fire_department",
+    iconColor: "text-[#fd9924]",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuD_ZedsPaM2u3PPCUyYwoA7spcFhcPPN4nt0mjhPDAtskAD877i1VM8iaaFfa_ozP9z-AM6B0QV2RbBAQRKq01YjihwVFgZOXUrHlj92ptZZMeDEyog-WD0oRpauJRMzROQHYqFznB7VtoHOyTtb0J9eJ2zRqxBpCfsxRa16DC9l-ISJJgPdQjYKMF8JzrjQFP-5UDpOKWOgsNEWZLKx9rDes2EPaDwZBPFsG7j47B_cJyjgzDvB6Tg_QoJdca-PapcqrVr_N84lAE",
   },
   {
     id: "Your mom is cooking briyani",
-    emoji: "🍛",
     label: "Your mom is cooking briyani",
-    description: "Cardamom, saffron, love. The whole street knows something good is happening.",
-    palette: "from-yellow-900 to-amber-900",
-    border: "border-yellow-500",
-    ring: "ring-yellow-400",
-    badge: "bg-yellow-500/20 text-yellow-300",
+    description: "Steaming aromatic spices and warm kitchen memories.",
+    icon: "restaurant",
+    iconColor: "text-[#b8f568]",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDGSwDl8QAo2j8j8ocFKcNeygk4Xnf6CpF__6agCvBEoPD3nLelk62Cyetn6OFre-4LOBtfdmdKrI5EcxhfKnbyNadxvbyCG9t9Kd0HeIWK3h-l2usuXz73X8oFqmUaYdncVevOk8p0xevDI4zf4uEdB80Z-oI2LKxW4kEKg5HDGDzMTKgRe0oruRsOc9WYSzXP0ssHWOb0_YiUUrEm6lsBAYVMsUympFbBdlCK2VNg-XQlfq2j_0WEb2Z6XlcaQmgsf8Zz3SQHm6k",
   },
 ];
 
 export default function SurveyPage() {
-  const [step, setStep] = useState("survey");
+  const [selectedScent, setSelectedScent] = useState("Summer Rain");
   const [fullName, setFullName] = useState("");
   const [age, setAge] = useState("");
-  const [selectedScent, setSelectedScent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
-
     if (!fullName.trim()) return setError("Please enter your full name.");
     if (!age || isNaN(parseInt(age)) || parseInt(age) < 1 || parseInt(age) > 120)
       return setError("Please enter a valid age.");
-    if (!selectedScent) return setError("Please pick your scent.");
+    if (!selectedScent) return setError("Please select a scent.");
 
     setLoading(true);
     try {
       const res = await fetch("/api/survey", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ full_name: fullName.trim(), age: parseInt(age), favorite_scent: selectedScent }),
+        body: JSON.stringify({
+          full_name: fullName.trim(),
+          age: parseInt(age),
+          favorite_scent: selectedScent,
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Something went wrong.");
-      setStep("success");
+      setSubmitted(true);
     } catch (err) {
       setError(err.message);
     }
     setLoading(false);
   }
 
-  if (step === "success") {
+  if (submitted) {
     const scent = SCENTS.find((s) => s.id === selectedScent);
     return (
-      <div className="min-h-screen bg-[#0c0c0c] flex items-center justify-center px-4">
+      <div className="min-h-screen flex items-center justify-center px-6" style={{ backgroundColor: "#0e1111" }}>
         <div className="text-center max-w-md">
-          <div className="text-7xl mb-6 animate-bounce">{scent?.emoji}</div>
-          <h1 className="text-3xl font-bold text-white mb-3">You smell like a vibe.</h1>
-          <p className="text-gray-400 text-lg mb-2">
-            <span className="text-white font-semibold">{scent?.label}</span> — that tracks.
+          <div
+            className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8"
+            style={{ backgroundColor: "#b8f568", boxShadow: "0 0 40px rgba(184,245,104,0.4)" }}
+          >
+            <span className="material-symbols-outlined text-5xl" style={{ color: "#112000" }}>bolt</span>
+          </div>
+          <h1 className="text-4xl font-black text-white mb-3 tracking-tight">
+            Vibe <span style={{ color: "#b8f568", fontStyle: "italic" }}>activated.</span>
+          </h1>
+          <p className="text-lg mb-1" style={{ color: "#c2c9b3" }}>
+            Your essence has been captured —
           </p>
-          <p className="text-gray-500 text-sm mt-6">
-            Thanks {fullName.split(" ")[0]}. Your pick has been captured.
+          <p className="text-xl font-bold text-white mb-2">{scent?.label}</p>
+          <p className="text-sm mb-10" style={{ color: "#c2c9b3" }}>
+            Thanks {fullName.split(" ")[0]}. We've locked in your signature.
           </p>
           <button
-            onClick={() => { setStep("survey"); setFullName(""); setAge(""); setSelectedScent(null); }}
-            className="mt-8 px-6 py-3 rounded-full border border-white/20 text-white/60 text-sm hover:text-white hover:border-white/40 transition-all"
+            onClick={() => { setSubmitted(false); setFullName(""); setAge(""); setSelectedScent("Summer Rain"); }}
+            className="px-8 py-3 rounded-full border text-sm font-semibold transition-all"
+            style={{ borderColor: "#424938", color: "#c2c9b3" }}
           >
-            Take it again
+            Submit another
           </button>
         </div>
       </div>
@@ -92,110 +101,251 @@ export default function SurveyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0c0c0c] text-white">
-      <div className="max-w-2xl mx-auto px-6 pt-16 pb-10 text-center">
-        <div className="flex justify-center mb-8">
-          <img
-            src="/amuco-logo.jpg"
-            alt="Amuco 600"
-            className="h-16 md:h-20 w-auto object-contain"
-          />
-        </div>
-        <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4">
-          What does your SA<br />smell like?
-        </h1>
-        <p className="text-gray-400 text-base leading-relaxed">
-          Close your eyes. Pick the one that hits different.<br />
-          No wrong answers — only real ones.
-        </p>
-      </div>
+    <div className="pb-32" style={{ backgroundColor: "#0e1111", minHeight: "100vh" }}>
 
-      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto px-6 pb-20 space-y-8">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="text-xs uppercase tracking-widest text-gray-500 mb-2 block">Full Name</label>
-            <input
-              type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              placeholder="Your name"
-              maxLength={100}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all text-sm"
-            />
+      {/* Sticky TopAppBar */}
+      <header
+        className="sticky top-0 z-50 w-full h-20 border-b"
+        style={{ backgroundColor: "rgba(17,20,20,0.85)", backdropFilter: "blur(12px)", borderColor: "rgba(255,255,255,0.05)" }}
+      >
+        <div className="flex justify-between items-center w-full px-6 h-full max-w-7xl mx-auto">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-3xl font-bold" style={{ color: "#b8f568" }}>bubble_chart</span>
+            <span className="text-2xl font-black italic text-white tracking-tight">ScentVibe</span>
           </div>
-          <div>
-            <label className="text-xs uppercase tracking-widest text-gray-500 mb-2 block">Age</label>
-            <input
-              type="number"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              placeholder="Your age"
-              min="1"
-              max="120"
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all text-sm"
-            />
-          </div>
+          <button style={{ color: "#c2c9b3" }} className="hover:text-white transition-colors">
+            <span className="material-symbols-outlined">account_circle</span>
+          </button>
         </div>
+      </header>
 
-        <div>
-          <label className="text-xs uppercase tracking-widest text-gray-500 mb-4 block">Pick your scent</label>
-          <div className="space-y-3">
-            {SCENTS.map((scent) => {
-              const selected = selectedScent === scent.id;
-              return (
-                <button
-                  key={scent.id}
-                  type="button"
-                  onClick={() => setSelectedScent(scent.id)}
-                  className={`w-full text-left rounded-2xl border p-5 transition-all duration-200 ${
-                    selected
-                      ? `bg-gradient-to-r ${scent.palette} ${scent.border} ring-2 ${scent.ring}`
-                      : "bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/[0.08]"
-                  }`}
+      <main>
+        <div className="max-w-xl mx-auto px-6 py-12">
+
+          {/* Amuco Logo */}
+          <div className="flex justify-center mb-12">
+            <div
+              className="p-3 rounded-xl"
+              style={{ backgroundColor: "white", boxShadow: "0 0 40px rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}
+            >
+              <img src="/amuco-logo.jpg" alt="AMUCO 600" className="h-10 w-auto object-contain" />
+            </div>
+          </div>
+
+          {/* Progress */}
+          <div className="mb-12">
+            <div className="flex justify-between items-end mb-3">
+              <span className="text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: "#b8f568" }}>
+                Discovery Phase
+              </span>
+              <span className="text-[10px] font-bold tracking-widest" style={{ color: "rgba(255,255,255,0.4)" }}>
+                STEP 01/02
+              </span>
+            </div>
+            <div className="h-1 w-full rounded-full flex gap-1" style={{ backgroundColor: "rgba(255,255,255,0.05)" }}>
+              <div className="h-full w-1/2 rounded-full step-active" />
+              <div className="h-full w-1/2 rounded-full" style={{ backgroundColor: "rgba(255,255,255,0.05)" }} />
+            </div>
+          </div>
+
+          {/* Header */}
+          <section className="mb-12 text-center">
+            <h2 className="font-black text-white mb-4" style={{ fontSize: "44px", lineHeight: 1, letterSpacing: "-0.02em" }}>
+              Capture{" "}
+              <span style={{ color: "#b8f568", fontStyle: "italic" }}>the Vibe</span>
+            </h2>
+            <p className="mx-auto max-w-[85%]" style={{ color: "#c2c9b3", fontSize: "16px", lineHeight: 1.5 }}>
+              Introduce yourself and help us isolate your signature Mzansi essence.
+            </p>
+          </section>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-12">
+
+            {/* Name + Age — floating label inputs */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div className="relative">
+                <input
+                  id="full_name"
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder=" "
+                  maxLength={100}
+                  className="minimal-input peer"
+                />
+                <label
+                  htmlFor="full_name"
+                  className="float-label"
                 >
-                  <div className="flex items-center gap-4">
-                    <span className="text-3xl flex-shrink-0">{scent.emoji}</span>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <span className="font-semibold text-white text-base">{scent.label}</span>
-                        {selected && (
-                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${scent.badge}`}>
-                            selected
+                  Identity / Full Name
+                </label>
+              </div>
+              <div className="relative">
+                <input
+                  id="age"
+                  type="number"
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                  placeholder=" "
+                  min="1"
+                  max="120"
+                  className="minimal-input peer"
+                />
+                <label
+                  htmlFor="age"
+                  className="float-label"
+                >
+                  How old are you?
+                </label>
+              </div>
+            </div>
+
+            {/* Scent Gallery */}
+            <div>
+              <div className="flex items-center gap-4 mb-6">
+                <h3
+                  className="text-xs font-bold uppercase tracking-[0.3em] whitespace-nowrap"
+                  style={{ color: "#fd9924" }}
+                >
+                  Select Your Aura
+                </h3>
+                <div className="h-px flex-grow" style={{ backgroundColor: "rgba(255,255,255,0.1)" }} />
+              </div>
+
+              <div className="flex flex-col gap-4">
+                {SCENTS.map((scent) => (
+                  <label key={scent.id} className="relative block cursor-pointer">
+                    <input
+                      type="radio"
+                      name="favorite_scent"
+                      value={scent.id}
+                      checked={selectedScent === scent.id}
+                      onChange={() => setSelectedScent(scent.id)}
+                      className="sr-only custom-radio"
+                    />
+                    <div
+                      className="selection-card relative h-48 rounded-2xl overflow-hidden border-2 border-transparent transition-all duration-500"
+                      style={{
+                        backgroundImage: `url('${scent.image}')`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+                      }}
+                    >
+                      {/* Dark overlay */}
+                      <div
+                        className="card-overlay absolute inset-0 transition-colors duration-500"
+                        style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
+                      />
+                      {/* Content */}
+                      <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                        <div className="flex justify-between items-end">
+                          <div>
+                            <h4 className="text-white text-2xl font-bold mb-1">{scent.label}</h4>
+                            <p className="text-sm leading-snug max-w-[80%]" style={{ color: "rgba(255,255,255,0.7)" }}>
+                              {scent.description}
+                            </p>
+                          </div>
+                          <span className={`material-symbols-outlined text-3xl ${scent.iconColor}`}>
+                            {scent.icon}
                           </span>
-                        )}
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-400 leading-snug">{scent.description}</p>
+                      {/* Check badge */}
+                      <div
+                        className="check-badge absolute top-4 right-4 rounded-full p-1 opacity-0 scale-50 transition-all duration-300"
+                        style={{ backgroundColor: "#b8f568" }}
+                      >
+                        <span className="material-symbols-outlined text-lg block" style={{ color: "#112000" }}>
+                          check
+                        </span>
+                      </div>
                     </div>
-                    <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${
-                      selected ? `${scent.border} bg-white` : "border-white/20"
-                    }`}>
-                      {selected && <div className="w-2 h-2 rounded-full bg-gray-900" />}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Error */}
+            {error && (
+              <div
+                className="rounded-xl px-4 py-3 text-sm"
+                style={{ backgroundColor: "rgba(186,26,26,0.15)", border: "1px solid rgba(186,26,26,0.4)", color: "#ff8a80" }}
+              >
+                {error}
+              </div>
+            )}
+
+            {/* Submit */}
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="glow-button w-full py-5 px-8 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  background: "linear-gradient(90deg, #fd9924, #b8f568)",
+                  color: "#112000",
+                }}
+              >
+                <span className="tracking-tight">
+                  {loading ? "ACTIVATING..." : "ACTIVATE MY SCENT"}
+                </span>
+                {!loading && (
+                  <span className="material-symbols-outlined text-2xl" style={{ animation: "pulse 2s infinite" }}>
+                    bolt
+                  </span>
+                )}
+              </button>
+              <p
+                className="text-center text-[10px] uppercase tracking-widest mt-6"
+                style={{ color: "rgba(255,255,255,0.25)" }}
+              >
+                Secured via ScentVibe Encrypted Vibe Protocol
+              </p>
+            </div>
+          </form>
         </div>
+      </main>
 
-        {error && (
-          <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 text-red-400 text-sm">
-            {error}
-          </div>
-        )}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-4 bg-white text-black font-semibold rounded-2xl hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all text-base"
+      {/* Bottom Navigation */}
+      <nav
+        className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-4 rounded-t-[32px]"
+        style={{
+          backgroundColor: "rgba(14,17,17,0.92)",
+          backdropFilter: "blur(20px)",
+          borderTop: "1px solid rgba(255,255,255,0.05)",
+        }}
+      >
+        <a
+          href="#"
+          className="flex flex-col items-center justify-center rounded-2xl px-8 py-3 transition-all active:scale-90"
+          style={{
+            backgroundColor: "#b8f568",
+            color: "#112000",
+            boxShadow: "0 0 20px rgba(184,245,104,0.3)",
+          }}
         >
-          {loading ? "Sending..." : "Submit my pick →"}
-        </button>
-
-        <p className="text-center text-xs text-gray-600">
-          Your response is used for product research only.
-        </p>
-      </form>
+          <span className="material-symbols-outlined mb-0.5">bolt</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Activate</span>
+        </a>
+        <a
+          href="/results"
+          className="flex flex-col items-center justify-center px-6 py-2 transition-all active:scale-90 hover:text-white"
+          style={{ color: "#c2c9b3" }}
+        >
+          <span className="material-symbols-outlined mb-0.5">analytics</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Vibes</span>
+        </a>
+        <a
+          href="#"
+          className="flex flex-col items-center justify-center px-6 py-2 transition-all active:scale-90 hover:text-white"
+          style={{ color: "#c2c9b3" }}
+        >
+          <span className="material-symbols-outlined mb-0.5">settings</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider">Config</span>
+        </a>
+      </nav>
     </div>
   );
 }
