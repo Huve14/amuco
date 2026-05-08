@@ -23,9 +23,9 @@ const SCENTS = [
       "https://lh3.googleusercontent.com/aida-public/AB6AXuD_ZedsPaM2u3PPCUyYwoA7spcFhcPPN4nt0mjhPDAtskAD877i1VM8iaaFfa_ozP9z-AM6B0QV2RbBAQRKq01YjihwVFgZOXUrHlj92ptZZMeDEyog-WD0oRpauJRMzROQHYqFznB7VtoHOyTtb0J9eJ2zRqxBpCfsxRa16DC9l-ISJJgPdQjYKMF8JzrjQFP-5UDpOKWOgsNEWZLKx9rDes2EPaDwZBPFsG7j47B_cJyjgzDvB6Tg_QoJdca-PapcqrVr_N84lAE",
   },
   {
-    id: "Your mom is cooking briyani",
-    label: "Your mom is cooking briyani",
-    description: "Steaming aromatic spices and warm kitchen memories.",
+    id: "Amagwinya",
+    label: "Amagwinya",
+    description: "Hot dough pockets straight from the pan, the taste of home.",
     icon: "restaurant",
     iconColor: "text-[#b8f568]",
     image:
