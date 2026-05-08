@@ -324,6 +324,16 @@ function SurveyForm() {
         </div>
       </main>
 
+      {/* Consent Notice */}
+      <div className="max-w-xl mx-auto px-6 pb-8 text-center">
+        <p className="text-[10px] leading-relaxed" style={{ color: "rgba(255,255,255,0.3)" }}>
+          By submitting this form you consent to the collection and processing of your personal information
+          (name and age) in accordance with the Protection of Personal Information Act (POPIA), Act 4 of 2013.
+          Your data is collected solely for the purpose of this survey and will not be shared with third parties
+          without your consent. You may request access to or deletion of your information at any time.
+        </p>
+      </div>
+
       {/* Bottom Navigation — Activate only */}
       <nav
         className="fixed bottom-0 left-0 w-full z-50 flex justify-center items-center px-4 py-4 rounded-t-[32px]"
