@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 const SCENT_META = {
   "Summer Rain": { emoji: "🌧️", color: "bg-blue-500" },
   "Shishanyama": { emoji: "🔥", color: "bg-orange-500" },
-  "Your mom is cooking briyani": { emoji: "🍛", color: "bg-yellow-500" },
+  "Amagwinya": { emoji: "🥟", color: "bg-yellow-500" },
 };
 
 export default function ResultsPage() {
@@ -82,35 +82,6 @@ export default function ResultsPage() {
           </div>
         )}
 
-        {total > 0 && (
-          <div>
-            <h2 className="text-sm uppercase tracking-widest text-gray-500 mb-4">Recent Responses</h2>
-            <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="text-left px-5 py-3 text-gray-500 font-medium">Name</th>
-                    <th className="text-left px-5 py-3 text-gray-500 font-medium">Age</th>
-                    <th className="text-left px-5 py-3 text-gray-500 font-medium">Scent</th>
-                    <th className="text-left px-5 py-3 text-gray-500 font-medium">When</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(data.responses || []).slice(0, 50).map((r) => (
-                    <tr key={r.id} className="border-b border-white/5 last:border-0 hover:bg-white/5">
-                      <td className="px-5 py-3 text-white">{r.full_name}</td>
-                      <td className="px-5 py-3 text-gray-400">{r.age}</td>
-                      <td className="px-5 py-3 text-gray-300">{SCENT_META[r.favorite_scent]?.emoji} {r.favorite_scent}</td>
-                      <td className="px-5 py-3 text-gray-600 text-xs">
-                        {new Date(r.created_at).toLocaleDateString("en-ZA", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
 
         <div className="mt-8 text-center">
           <a href="/" className="text-gray-600 text-sm hover:text-gray-400 transition-colors">← Back to survey</a>

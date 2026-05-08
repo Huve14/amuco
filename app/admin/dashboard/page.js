@@ -6,7 +6,7 @@ import { LOCATIONS } from "@/lib/locations";
 const SCENT_META = {
   "Summer Rain":                   { emoji: "🌧️", color: "#60a5fa", bg: "rgba(96,165,250,0.15)" },
   "Shishanyama":                   { emoji: "🔥", color: "#fd9924", bg: "rgba(253,153,36,0.15)" },
-  "Your mom is cooking briyani":   { emoji: "🍛", color: "#b8f568", bg: "rgba(184,245,104,0.15)" },
+  "Amagwinya":                      { emoji: "🥟", color: "#b8f568", bg: "rgba(184,245,104,0.15)" },
 };
 
 const RANK_ICONS = ["emoji_events", "workspace_premium", "military_tech"];
