@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { LOCATIONS } from "@/lib/locations";
 
-const VALID_SCENTS = ["Summer Rain", "Shishanyama", "Your mom is cooking briyani"];
+const VALID_SCENTS = ["Summer Rain", "Shishanyama", "Amagwinya"];
 
 export async function POST(req) {
   try {
@@ -46,7 +46,7 @@ export async function GET() {
   try {
     const { data, error } = await supabase
       .from("participants")
-      .select("*")
+      .select("favorite_scent, created_at")
       .order("created_at", { ascending: false });
 
     if (error)
@@ -55,7 +55,7 @@ export async function GET() {
     const tally = VALID_SCENTS.reduce((acc, s) => ({ ...acc, [s]: 0 }), {});
     data.forEach((r) => { if (tally[r.favorite_scent] !== undefined) tally[r.favorite_scent]++; });
 
-    return Response.json({ total: data.length, tally, responses: data });
+    return Response.json({ total: data.length, tally });
   } catch (err) {
     console.error("Survey GET error:", err);
     return Response.json({ error: "Something went wrong." }, { status: 500 });
