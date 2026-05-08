@@ -23,9 +23,9 @@ const SCENTS = [
       "https://lh3.googleusercontent.com/aida-public/AB6AXuD_ZedsPaM2u3PPCUyYwoA7spcFhcPPN4nt0mjhPDAtskAD877i1VM8iaaFfa_ozP9z-AM6B0QV2RbBAQRKq01YjihwVFgZOXUrHlj92ptZZMeDEyog-WD0oRpauJRMzROQHYqFznB7VtoHOyTtb0J9eJ2zRqxBpCfsxRa16DC9l-ISJJgPdQjYKMF8JzrjQFP-5UDpOKWOgsNEWZLKx9rDes2EPaDwZBPFsG7j47B_cJyjgzDvB6Tg_QoJdca-PapcqrVr_N84lAE",
   },
   {
-    id: "Your mom is cooking briyani",
-    label: "Your mom is cooking briyani",
-    description: "Steaming aromatic spices and warm kitchen memories.",
+    id: "Amagwinya",
+    label: "Amagwinya",
+    description: "Hot dough pockets straight from the pan, the taste of home.",
     icon: "restaurant",
     iconColor: "text-[#b8f568]",
     image:
@@ -323,6 +323,16 @@ function SurveyForm() {
           </form>
         </div>
       </main>
+
+      {/* Consent Notice */}
+      <div className="max-w-xl mx-auto px-6 pb-8 text-center">
+        <p className="text-[10px] leading-relaxed" style={{ color: "rgba(255,255,255,0.3)" }}>
+          By submitting this form you consent to the collection and processing of your personal information
+          (name and age) in accordance with the Protection of Personal Information Act (POPIA), Act 4 of 2013.
+          Your data is collected solely for the purpose of this survey and will not be shared with third parties
+          without your consent. You may request access to or deletion of your information at any time.
+        </p>
+      </div>
 
       {/* Bottom Navigation — Activate only */}
       <nav
