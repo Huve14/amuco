@@ -14,8 +14,8 @@ const SCENTS = [
       "https://lh3.googleusercontent.com/aida-public/AB6AXuDBZwutAiknR_w1mZYmSehVM7dENUxD95KZyifuGAAk6rrayNxXgSYW4_WboG14fwKr3QwYu98RzFcV_4rY4Fo2T111TIhZhyDlhOTbebwhz_BeoMv0X4KlyP8P42dUg8ShUGJ6YvSJCXdaU4eNk6lbYS_F2uX8nmYoIBEyDWK3i4s9EJ5G_2-gDk_aSIq3cKbFnVHdMmXA7C5FNoGqn6Cx1KnKxiSv6pUbG9CPSq_DmA-rs7cY4T8a58eR98sYBfwwTcfzsbxDZdI",
   },
   {
-    id: "Shishanyama",
-    label: "Shishanyama",
+    id: "Shisanyama",
+    label: "Shisanyama",
     description: "Smoky woodfire, charcoal, and the soul of a community fire.",
     icon: "local_fire_department",
     iconColor: "text-[#fd9924]",

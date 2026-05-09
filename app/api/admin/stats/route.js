@@ -3,7 +3,7 @@ import crypto from "crypto";
 import { supabase } from "@/lib/supabase";
 import { LOCATIONS } from "@/lib/locations";
 
-const VALID_SCENTS = ["Summer Rain", "Shishanyama", "Amagwinya"];
+const VALID_SCENTS = ["Summer Rain", "Shisanyama", "Amagwinya"];
 
 function getSessionToken() {
   return crypto
