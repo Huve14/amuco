@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 const SCENT_META = {
   "Summer Rain": { emoji: "🌧️", color: "bg-blue-500" },
-  "Shishanyama": { emoji: "🔥", color: "bg-orange-500" },
+  "Shisanyama": { emoji: "🔥", color: "bg-orange-500" },
   "Amagwinya": { emoji: "🥟", color: "bg-yellow-500" },
 };
 

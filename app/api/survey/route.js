@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { LOCATIONS } from "@/lib/locations";
 
-const VALID_SCENTS = ["Summer Rain", "Shishanyama", "Amagwinya"];
+const VALID_SCENTS = ["Summer Rain", "Shisanyama", "Amagwinya"];
 
 export async function POST(req) {
   try {
