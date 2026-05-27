@@ -41,6 +41,8 @@ function SurveyForm() {
   const [selectedScent, setSelectedScent] = useState("Summer Rain");
   const [fullName, setFullName] = useState("");
   const [age, setAge] = useState("");
+  const [email, setEmail] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -51,6 +53,10 @@ function SurveyForm() {
     if (!fullName.trim()) return setError("Please enter your full name.");
     if (!age || isNaN(parseInt(age)) || parseInt(age) < 1 || parseInt(age) > 120)
       return setError("Please enter a valid age.");
+    if (!email.trim() && !contactNumber.trim())
+      return setError("Please enter your email address or contact number.");
+    if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()))
+      return setError("Please enter a valid email address.");
     if (!selectedScent) return setError("Please select a scent.");
 
     setLoading(true);
@@ -61,6 +67,8 @@ function SurveyForm() {
         body: JSON.stringify({
           full_name: fullName.trim(),
           age: parseInt(age),
+          email: email.trim() || null,
+          contact_number: contactNumber.trim() || null,
           favorite_scent: selectedScent,
           location: locSlug,
         }),
@@ -96,7 +104,7 @@ function SurveyForm() {
             Thanks {fullName.split(" ")[0]}. We've locked in your signature.
           </p>
           <button
-            onClick={() => { setSubmitted(false); setFullName(""); setAge(""); setSelectedScent("Summer Rain"); }}
+            onClick={() => { setSubmitted(false); setFullName(""); setAge(""); setEmail(""); setContactNumber(""); setSelectedScent("Summer Rain"); }}
             className="px-8 py-3 rounded-full border text-sm font-semibold transition-all"
             style={{ borderColor: "#424938", color: "#c2c9b3" }}
           >
@@ -190,10 +198,7 @@ function SurveyForm() {
                   maxLength={100}
                   className="minimal-input peer"
                 />
-                <label
-                  htmlFor="full_name"
-                  className="float-label"
-                >
+                <label htmlFor="full_name" className="float-label">
                   Identity / Full Name
                 </label>
               </div>
@@ -208,12 +213,50 @@ function SurveyForm() {
                   max="120"
                   className="minimal-input peer"
                 />
-                <label
-                  htmlFor="age"
-                  className="float-label"
-                >
+                <label htmlFor="age" className="float-label">
                   How old are you?
                 </label>
+              </div>
+            </div>
+
+            {/* Contact details — at least one required */}
+            <div>
+              <div className="flex items-center gap-4 mb-6">
+                <h3 className="text-xs font-bold uppercase tracking-[0.3em] whitespace-nowrap" style={{ color: "#b8f568" }}>
+                  Stay Connected
+                </h3>
+                <div className="h-px flex-grow" style={{ backgroundColor: "rgba(255,255,255,0.1)" }} />
+                <span className="text-[10px] whitespace-nowrap" style={{ color: "rgba(255,255,255,0.35)" }}>one is enough</span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="relative">
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder=" "
+                    maxLength={150}
+                    className="minimal-input peer"
+                  />
+                  <label htmlFor="email" className="float-label">
+                    Email Address
+                  </label>
+                </div>
+                <div className="relative">
+                  <input
+                    id="contact_number"
+                    type="tel"
+                    value={contactNumber}
+                    onChange={(e) => setContactNumber(e.target.value)}
+                    placeholder=" "
+                    maxLength={20}
+                    className="minimal-input peer"
+                  />
+                  <label htmlFor="contact_number" className="float-label">
+                    Contact Number
+                  </label>
+                </div>
               </div>
             </div>
 

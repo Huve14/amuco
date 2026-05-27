@@ -6,7 +6,7 @@ const VALID_SCENTS = ["Summer Rain", "Shisanyama", "Amagwinya"];
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { full_name, age, favorite_scent, location } = body;
+    const { full_name, age, email, contact_number, favorite_scent, location } = body;
 
     if (!full_name || typeof full_name !== "string" || full_name.trim().length === 0)
       return Response.json({ error: "Full name is required." }, { status: 400 });
@@ -18,15 +18,19 @@ export async function POST(req) {
     if (isNaN(ageNum) || ageNum < 1 || ageNum > 120)
       return Response.json({ error: "Please enter a valid age." }, { status: 400 });
 
+    const emailVal = email?.trim() || null;
+    const contactVal = contact_number?.trim() || null;
+    if (!emailVal && !contactVal)
+      return Response.json({ error: "Please provide an email address or contact number." }, { status: 400 });
+
     if (!VALID_SCENTS.includes(favorite_scent))
       return Response.json({ error: "Please select a valid scent." }, { status: 400 });
 
-    // Validate location — store null if unknown slug (never reject submission)
     const validatedLocation = location && LOCATIONS[location] ? location : null;
 
     const { data, error } = await supabase
       .from("participants")
-      .insert([{ full_name: full_name.trim(), age: ageNum, favorite_scent, location: validatedLocation }])
+      .insert([{ full_name: full_name.trim(), age: ageNum, email: emailVal, contact_number: contactVal, favorite_scent, location: validatedLocation }])
       .select("id")
       .single();
 
