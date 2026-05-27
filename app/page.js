@@ -151,7 +151,7 @@ function SurveyForm() {
                 style={{ backgroundColor: "rgba(184,245,104,0.1)", border: "1px solid rgba(184,245,104,0.2)", color: "#b8f568" }}
               >
                 <span className="material-symbols-outlined text-sm">location_on</span>
-                {locationMeta.name} · {locationMeta.area}
+                {locationMeta.name}
               </div>
             )}
           </div>
