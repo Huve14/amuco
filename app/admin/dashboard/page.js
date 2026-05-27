@@ -409,7 +409,7 @@ export default function AdminDashboard() {
               <table className="w-full text-sm">
                 <thead>
                   <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                    {["Name", "Age", "Scent", "Location", "Submitted"].map((h) => (
+                    {["Name", "Age", "Email / Contact", "Scent", "Location", "Submitted"].map((h) => (
                       <th key={h} className="text-left px-6 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: "#c2c9b3" }}>
                         {h}
                       </th>
@@ -427,6 +427,10 @@ export default function AdminDashboard() {
                       >
                         <td className="px-6 py-3.5 font-medium text-white">{r.full_name}</td>
                         <td className="px-6 py-3.5" style={{ color: "#c2c9b3" }}>{r.age}</td>
+                        <td className="px-6 py-3.5 text-xs" style={{ color: "#c2c9b3" }}>
+                          {r.email || r.contact_number || <span style={{ color: "rgba(255,255,255,0.2)" }}>—</span>}
+                          {r.email && r.contact_number && <><br />{r.contact_number}</>}
+                        </td>
                         <td className="px-6 py-3.5">
                           <span
                             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
