@@ -1,6 +1,27 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Component } from "react";
 import { resolveLocation } from "@/lib/locations";
+
+class ErrorBoundary extends Component {
+  constructor(props) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(error) { return { error }; }
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{ backgroundColor: "#0e1111", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px" }}>
+          <div style={{ color: "#ff8a80", textAlign: "center", maxWidth: "400px" }}>
+            <p style={{ fontSize: "18px", marginBottom: "8px" }}>Something went wrong.</p>
+            <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)", wordBreak: "break-all" }}>{this.state.error?.message}</p>
+            <button onClick={() => window.location.reload()} style={{ marginTop: "16px", padding: "8px 24px", backgroundColor: "#b8f568", color: "#112000", border: "none", borderRadius: "8px", fontWeight: "bold", cursor: "pointer" }}>
+              Reload
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const SCENTS = [
   {
@@ -410,5 +431,9 @@ function SurveyForm() {
 }
 
 export default function SurveyPage() {
-  return <SurveyForm />;
+  return (
+    <ErrorBoundary>
+      <SurveyForm />
+    </ErrorBoundary>
+  );
 }

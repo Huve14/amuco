@@ -15,6 +15,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <meta httpEquiv="cache-control" content="no-cache, no-store, must-revalidate" />
+        <meta httpEquiv="pragma" content="no-cache" />
+        <meta httpEquiv="expires" content="0" />
         <link
           href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;0,800;1,800&display=swap"
           rel="stylesheet"
