@@ -8,10 +8,10 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.error) {
       return (
-        <div style={{ backgroundColor: "#0e1111", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px" }}>
+        <div style={{ backgroundColor: "#0e1111", minHeight: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px" }}>
           <div style={{ color: "#ff8a80", textAlign: "center", maxWidth: "400px" }}>
-            <p style={{ fontSize: "18px", marginBottom: "8px" }}>Something went wrong.</p>
-            <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)", wordBreak: "break-all" }}>{this.state.error?.message}</p>
+            <p style={{ fontSize: "clamp(14px, 2vw, 18px)", marginBottom: "8px" }}>Something went wrong.</p>
+            <p style={{ fontSize: "clamp(10px, 1.5vw, 12px)", color: "rgba(255,255,255,0.4)", wordBreak: "break-all" }}>{this.state.error?.message}</p>
             <button onClick={() => window.location.reload()} style={{ marginTop: "16px", padding: "8px 24px", backgroundColor: "#b8f568", color: "#112000", border: "none", borderRadius: "8px", fontWeight: "bold", cursor: "pointer" }}>
               Reload
             </button>
@@ -30,8 +30,7 @@ const SCENTS = [
     description: "The crisp electric smell of asphalt meeting afternoon rain.",
     icon: "water_drop",
     iconColor: "text-[#b8f568]",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDBZwutAiknR_w1mZYmSehVM7dENUxD95KZyifuGAAk6rrayNxXgSYW4_WboG14fwKr3QwYu98RzFcV_4rY4Fo2T111TIhZhyDlhOTbebwhz_BeoMv0X4KlyP8P42dUg8ShUGJ6YvSJCXdaU4eNk6lbYS_F2uX8nmYoIBEyDWK3i4s9EJ5G_2-gDk_aSIq3cKbFnVHdMmXA7C5FNoGqn6Cx1KnKxiSv6pUbG9CPSq_DmA-rs7cY4T8a58eR98sYBfwwTcfzsbxDZdI",
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDBZwutAiknR_w1mZYmSehVM7dENUxD95KZyifuGAAk6rrayNxXgSYW4_WboG14fwKr3QwYu98RzFcV_4rY4Fo2T111TIhZhyDlhOTbebwhz_BeoMv0X4KlyP8P42dUg8ShUGJ6YvSJCXdaU4eNk6lbYS_F2uX8nmYoIBEyDWK3i4s9EJ5G_2-gDk_aSIq3cKbFnVHdMmXA7C5FNoGqn6Cx1KnKxiSv6pUbG9CPSq_DmA-rs7cY4T8a58eR98sYBfwwTcfzsbxDZdI",
   },
   {
     id: "Shisanyama",
@@ -39,8 +38,7 @@ const SCENTS = [
     description: "Smoky woodfire, charcoal, and the soul of a community fire.",
     icon: "local_fire_department",
     iconColor: "text-[#fd9924]",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuD_ZedsPaM2u3PPCUyYwoA7spcFhcPPN4nt0mjhPDAtskAD877i1VM8iaaFfa_ozP9z-AM6B0QV2RbBAQRKq01YjihwVFgZOXUrHlj92ptZZMeDEyog-WD0oRpauJRMzROQHYqFznB7VtoHOyTtb0J9eJ2zRqxBpCfsxRa16DC9l-ISJJgPdQjYKMF8JzrjQFP-5UDpOKWOgsNEWZLKx9rDes2EPaDwZBPFsG7j47B_cJyjgzDvB6Tg_QoJdca-PapcqrVr_N84lAE",
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuD_ZedsPaM2u3PPCUyYwoA7spcFhcPPN4nt0mjhPDAtskAD877i1VM8iaaFfa_ozP9z-AM6B0QV2RbBAQRKq01YjihwVFgZOXUrHlj92ptZZMeDEyog-WD0oRpauJRMzROQHYqFznB7VtoHOyTtb0J9eJ2zRqxBpCfsxRa16DC9l-ISJJgPdQjYKMF8JzrjQFP-5UDpOKWOgsNEWZLKx9rDes2EPaDwZBPFsG7j47B_cJyjgzDvB6Tg_QoJdca-PapcqrVr_N84lAE",
   },
   {
     id: "Amagwinya",
@@ -48,8 +46,7 @@ const SCENTS = [
     description: "Hot dough pockets straight from the pan, the taste of home.",
     icon: "restaurant",
     iconColor: "text-[#b8f568]",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDGSwDl8QAo2j8j8ocFKcNeygk4Xnf6CpF__6agCvBEoPD3nLelk62Cyetn6OFre-4LOBtfdmdKrI5EcxhfKnbyNadxvbyCG9t9Kd0HeIWK3h-l2usuXz73X8oFqmUaYdncVevOk8p0xevDI4zf4uEdB80Z-oI2LKxW4kEKg5HDGDzMTKgRe0oruRsOc9WYSzXP0ssHWOb0_YiUUrEm6lsBAYVMsUympFbBdlCK2VNg-XQlfq2j_0WEb2Z6XlcaQmgsf8Zz3SQHm6k",
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDGSwDl8QAo2j8j8ocFKcNeygk4Xnf6CpF__6agCvBEoPD3nLelk62Cyetn6OFre-4LOBtfdmdKrI5EcxhfKnbyNadxvbyCG9t9Kd0HeIWK3h-l2usuXz73X8oFqmUaYdncVevOk8p0xevDI4zf4uEdB80Z-oI2LKxW4kEKg5HDGDzMTKgRe0oruRsOc9WYSzXP0ssHWOb0_YiUUrEm6lsBAYVMsUympFbBdlCK2VNg-XQlfq2j_0WEb2Z6XlcaQmgsf8Zz3SQHm6k",
   },
 ];
 
@@ -111,28 +108,32 @@ function SurveyForm() {
   if (submitted) {
     const scent = SCENTS.find((s) => s.id === selectedScent);
     return (
-      <div className="min-h-screen flex items-center justify-center px-6" style={{ backgroundColor: "#0e1111" }}>
-        <div className="text-center max-w-md">
-          <div
-            className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8"
-            style={{ backgroundColor: "#b8f568", boxShadow: "0 0 40px rgba(184,245,104,0.4)" }}
-          >
-            <span className="material-symbols-outlined text-5xl" style={{ color: "#112000" }}>bolt</span>
+      <div style={{ backgroundColor: "#0e1111", minHeight: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", padding: "clamp(16px, 4vw, 32px)" }}>
+        <div style={{ textAlign: "center", width: "100%", maxWidth: "clamp(280px, 50vw, 480px)" }}>
+          <div style={{
+            width: "clamp(72px, 12vw, 112px)",
+            height: "clamp(72px, 12vw, 112px)",
+            borderRadius: "50%",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            margin: "0 auto clamp(20px, 4vw, 36px)",
+            backgroundColor: "#b8f568",
+            boxShadow: "0 0 40px rgba(184,245,104,0.4)",
+          }}>
+            <span className="material-symbols-outlined" style={{ fontSize: "clamp(32px, 6vw, 56px)", color: "#112000" }}>bolt</span>
           </div>
-          <h1 className="text-4xl font-black text-white mb-3 tracking-tight">
+          <h1 style={{ fontSize: "clamp(24px, 5vw, 44px)", fontWeight: 900, color: "white", marginBottom: "clamp(8px, 1.5vw, 14px)", letterSpacing: "-0.02em" }}>
             Vibe <span style={{ color: "#b8f568", fontStyle: "italic" }}>activated.</span>
           </h1>
-          <p className="text-lg mb-1" style={{ color: "#c2c9b3" }}>
+          <p style={{ fontSize: "clamp(14px, 2vw, 20px)", marginBottom: "6px", color: "#c2c9b3" }}>
             Your essence has been captured —
           </p>
-          <p className="text-xl font-bold text-white mb-2">{scent?.label}</p>
-          <p className="text-sm mb-10" style={{ color: "#c2c9b3" }}>
+          <p style={{ fontSize: "clamp(16px, 2.5vw, 22px)", fontWeight: 700, color: "white", marginBottom: "8px" }}>{scent?.label}</p>
+          <p style={{ fontSize: "clamp(12px, 1.5vw, 15px)", marginBottom: "clamp(24px, 5vw, 48px)", color: "#c2c9b3" }}>
             Thanks {fullName.split(" ")[0]}. We've locked in your signature.
           </p>
           <button
             onClick={() => { setSubmitted(false); setFullName(""); setAge(""); setEmail(""); setContactNumber(""); setSelectedScent("Summer Rain"); }}
-            className="px-8 py-3 rounded-full border text-sm font-semibold transition-all"
-            style={{ borderColor: "#424938", color: "#c2c9b3" }}
+            style={{ padding: "clamp(10px, 1.5vw, 14px) clamp(24px, 4vw, 40px)", borderRadius: "9999px", border: "1px solid #424938", fontSize: "clamp(12px, 1.5vw, 14px)", fontWeight: 600, color: "#c2c9b3", background: "transparent", cursor: "pointer" }}
           >
             Submit another
           </button>
@@ -142,209 +143,142 @@ function SurveyForm() {
   }
 
   return (
-    <div className="pb-32" style={{ backgroundColor: "#0e1111", minHeight: "100vh" }}>
+    <div style={{ backgroundColor: "#0e1111", minHeight: "100dvh", paddingBottom: "clamp(80px, 12vh, 120px)" }}>
 
-      {/* Sticky TopAppBar */}
-      <header
-        className="sticky top-0 z-50 w-full h-20 border-b"
-        style={{ backgroundColor: "rgba(17,20,20,0.85)", backdropFilter: "blur(12px)", borderColor: "rgba(255,255,255,0.05)" }}
-      >
-        <div className="flex justify-between items-center w-full px-6 h-full max-w-7xl mx-auto">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-3xl font-bold" style={{ color: "#b8f568" }}>bubble_chart</span>
-            <span className="text-2xl font-black italic text-white tracking-tight">ScentVibe</span>
+      {/* Header */}
+      <header style={{
+        position: "sticky", top: 0, zIndex: 50, width: "100%",
+        height: "clamp(56px, 8vh, 80px)",
+        backgroundColor: "rgba(17,20,20,0.85)",
+        backdropFilter: "blur(12px)",
+        borderBottom: "1px solid rgba(255,255,255,0.05)",
+        display: "flex", alignItems: "center",
+      }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", padding: "0 clamp(16px, 4vw, 32px)", maxWidth: "1200px", margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "clamp(6px, 1vw, 10px)" }}>
+            <span className="material-symbols-outlined" style={{ fontSize: "clamp(22px, 3.5vw, 32px)", color: "#b8f568" }}>bubble_chart</span>
+            <span style={{ fontSize: "clamp(16px, 2.5vw, 24px)", fontWeight: 900, fontStyle: "italic", color: "white", letterSpacing: "-0.02em" }}>ScentVibe</span>
           </div>
-          <button style={{ color: "#c2c9b3" }} className="hover:text-white transition-colors">
-            <span className="material-symbols-outlined">account_circle</span>
+          <button style={{ color: "#c2c9b3", background: "none", border: "none", cursor: "pointer" }}>
+            <span className="material-symbols-outlined" style={{ fontSize: "clamp(20px, 3vw, 28px)" }}>account_circle</span>
           </button>
         </div>
       </header>
 
       <main>
-        <div className="max-w-xl mx-auto px-6 py-12">
+        <div style={{ maxWidth: "clamp(320px, 90vw, 680px)", margin: "0 auto", padding: "clamp(24px, 5vw, 56px) clamp(16px, 4vw, 32px)" }}>
 
-          {/* Amuco Logo */}
-          <div className="flex flex-col items-center mb-12 gap-3">
-            <div
-              className="p-3 rounded-xl"
-              style={{ backgroundColor: "white", boxShadow: "0 0 40px rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}
-            >
-              <img src="/amuco-logo.jpg" alt="AMUCO 600" className="h-10 w-auto object-contain" />
+          {/* Logo + location badge */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "clamp(24px, 5vw, 56px)", gap: "clamp(8px, 1.5vw, 14px)" }}>
+            <div style={{ padding: "clamp(8px, 1.5vw, 14px)", borderRadius: "12px", backgroundColor: "white", boxShadow: "0 0 40px rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}>
+              <img src="/amuco-logo.jpg" alt="AMUCO 600" style={{ height: "clamp(28px, 5vw, 48px)", width: "auto", objectFit: "contain", display: "block" }} />
             </div>
             {locationMeta && (
-              <div
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold"
-                style={{ backgroundColor: "rgba(184,245,104,0.1)", border: "1px solid rgba(184,245,104,0.2)", color: "#b8f568" }}
-              >
-                <span className="material-symbols-outlined text-sm">location_on</span>
-                {locationMeta.name}
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "clamp(4px, 0.8vw, 8px) clamp(10px, 2vw, 16px)", borderRadius: "9999px", backgroundColor: "rgba(184,245,104,0.1)", border: "1px solid rgba(184,245,104,0.2)", color: "#b8f568" }}>
+                <span className="material-symbols-outlined" style={{ fontSize: "clamp(14px, 2vw, 18px)" }}>location_on</span>
+                <span style={{ fontSize: "clamp(10px, 1.5vw, 13px)", fontWeight: 700 }}>{locationMeta.name}</span>
               </div>
             )}
           </div>
 
-          {/* Progress */}
-          <div className="mb-12">
-            <div className="flex justify-between items-end mb-3">
-              <span className="text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: "#b8f568" }}>
-                Discovery Phase
-              </span>
-              <span className="text-[10px] font-bold tracking-widest" style={{ color: "rgba(255,255,255,0.4)" }}>
-                STEP 01/02
-              </span>
+          {/* Progress bar */}
+          <div style={{ marginBottom: "clamp(24px, 5vw, 56px)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "clamp(8px, 1.5vw, 14px)" }}>
+              <span style={{ fontSize: "clamp(8px, 1.2vw, 11px)", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#b8f568" }}>Discovery Phase</span>
+              <span style={{ fontSize: "clamp(8px, 1.2vw, 11px)", fontWeight: 700, letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>STEP 01/02</span>
             </div>
-            <div className="h-1 w-full rounded-full flex gap-1" style={{ backgroundColor: "rgba(255,255,255,0.05)" }}>
-              <div className="h-full w-1/2 rounded-full step-active" />
-              <div className="h-full w-1/2 rounded-full" style={{ backgroundColor: "rgba(255,255,255,0.05)" }} />
+            <div style={{ height: "clamp(3px, 0.5vw, 5px)", width: "100%", borderRadius: "9999px", display: "flex", gap: "4px", backgroundColor: "rgba(255,255,255,0.05)" }}>
+              <div className="step-active" style={{ height: "100%", width: "50%", borderRadius: "9999px" }} />
+              <div style={{ height: "100%", width: "50%", borderRadius: "9999px", backgroundColor: "rgba(255,255,255,0.05)" }} />
             </div>
           </div>
 
-          {/* Header */}
-          <section className="mb-12 text-center">
-            <h2 className="font-black text-white mb-4" style={{ fontSize: "44px", lineHeight: 1, letterSpacing: "-0.02em" }}>
+          {/* Heading */}
+          <section style={{ marginBottom: "clamp(24px, 5vw, 56px)", textAlign: "center" }}>
+            <h2 style={{ fontSize: "clamp(28px, 6vw, 52px)", fontWeight: 900, color: "white", marginBottom: "clamp(10px, 2vw, 18px)", lineHeight: 1, letterSpacing: "-0.02em" }}>
               Capture{" "}
               <span style={{ color: "#b8f568", fontStyle: "italic" }}>the Vibe</span>
             </h2>
-            <p className="mx-auto max-w-[85%]" style={{ color: "#c2c9b3", fontSize: "16px", lineHeight: 1.5 }}>
+            <p style={{ color: "#c2c9b3", fontSize: "clamp(13px, 2vw, 17px)", lineHeight: 1.5, maxWidth: "85%", margin: "0 auto" }}>
               Introduce yourself and help us isolate your signature Mzansi essence.
             </p>
           </section>
 
           {/* Form */}
-          <form id="survey-form" onSubmit={handleSubmit} className="space-y-12">
+          <form id="survey-form" onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "clamp(24px, 5vw, 52px)" }}>
 
-            {/* Name + Age — floating label inputs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {/* Name + Age */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(16px, 4vw, 40px)" }}>
               <div className="relative">
-                <input
-                  id="full_name"
-                  type="text"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder=" "
-                  maxLength={100}
-                  className="minimal-input peer"
-                />
-                <label htmlFor="full_name" className="float-label">
-                  Identity / Full Name
-                </label>
+                <input id="full_name" type="text" value={fullName} onChange={(e) => setFullName(e.target.value)}
+                  placeholder=" " maxLength={100} className="minimal-input peer" />
+                <label htmlFor="full_name" className="float-label">Identity / Full Name</label>
               </div>
               <div className="relative">
-                <input
-                  id="age"
-                  type="number"
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-                  placeholder=" "
-                  min="1"
-                  max="120"
-                  className="minimal-input peer"
-                />
-                <label htmlFor="age" className="float-label">
-                  How old are you?
-                </label>
+                <input id="age" type="number" value={age} onChange={(e) => setAge(e.target.value)}
+                  placeholder=" " min="1" max="120" className="minimal-input peer" />
+                <label htmlFor="age" className="float-label">How old are you?</label>
               </div>
             </div>
 
-            {/* Contact details — at least one required */}
+            {/* Stay Connected */}
             <div>
-              <div className="flex items-center gap-4 mb-6">
-                <h3 className="text-xs font-bold uppercase tracking-[0.3em] whitespace-nowrap" style={{ color: "#b8f568" }}>
-                  Stay Connected
-                </h3>
-                <div className="h-px flex-grow" style={{ backgroundColor: "rgba(255,255,255,0.1)" }} />
-                <span className="text-[10px] whitespace-nowrap" style={{ color: "rgba(255,255,255,0.35)" }}>one is enough</span>
+              <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px, 2vw, 16px)", marginBottom: "clamp(14px, 3vw, 26px)" }}>
+                <h3 style={{ fontSize: "clamp(9px, 1.3vw, 12px)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.3em", whiteSpace: "nowrap", color: "#b8f568" }}>Stay Connected</h3>
+                <div style={{ height: "1px", flexGrow: 1, backgroundColor: "rgba(255,255,255,0.1)" }} />
+                <span style={{ fontSize: "clamp(8px, 1.1vw, 11px)", whiteSpace: "nowrap", color: "rgba(255,255,255,0.35)" }}>one is enough</span>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(16px, 4vw, 40px)" }}>
                 <div className="relative">
-                  <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder=" "
-                    maxLength={150}
-                    className="minimal-input peer"
-                  />
-                  <label htmlFor="email" className="float-label">
-                    Email Address
-                  </label>
+                  <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                    placeholder=" " maxLength={150} className="minimal-input peer" />
+                  <label htmlFor="email" className="float-label">Email Address</label>
                 </div>
                 <div className="relative">
-                  <input
-                    id="contact_number"
-                    type="tel"
-                    value={contactNumber}
-                    onChange={(e) => setContactNumber(e.target.value)}
-                    placeholder=" "
-                    maxLength={20}
-                    className="minimal-input peer"
-                  />
-                  <label htmlFor="contact_number" className="float-label">
-                    Contact Number
-                  </label>
+                  <input id="contact_number" type="tel" value={contactNumber} onChange={(e) => setContactNumber(e.target.value)}
+                    placeholder=" " maxLength={20} className="minimal-input peer" />
+                  <label htmlFor="contact_number" className="float-label">Contact Number</label>
                 </div>
               </div>
             </div>
 
             {/* Scent Gallery */}
             <div>
-              <div className="flex items-center gap-4 mb-6">
-                <h3
-                  className="text-xs font-bold uppercase tracking-[0.3em] whitespace-nowrap"
-                  style={{ color: "#fd9924" }}
-                >
-                  Select Your Aura
-                </h3>
-                <div className="h-px flex-grow" style={{ backgroundColor: "rgba(255,255,255,0.1)" }} />
+              <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px, 2vw, 16px)", marginBottom: "clamp(14px, 3vw, 26px)" }}>
+                <h3 style={{ fontSize: "clamp(9px, 1.3vw, 12px)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.3em", whiteSpace: "nowrap", color: "#fd9924" }}>Select Your Aura</h3>
+                <div style={{ height: "1px", flexGrow: 1, backgroundColor: "rgba(255,255,255,0.1)" }} />
               </div>
-
-              <div className="flex flex-col gap-4">
+              <div style={{ display: "flex", flexDirection: "column", gap: "clamp(8px, 1.5vw, 16px)" }}>
                 {SCENTS.map((scent) => (
-                  <label key={scent.id} className="relative block cursor-pointer">
-                    <input
-                      type="radio"
-                      name="favorite_scent"
-                      value={scent.id}
-                      checked={selectedScent === scent.id}
-                      onChange={() => setSelectedScent(scent.id)}
-                      className="sr-only custom-radio"
-                    />
-                    <div
-                      className="selection-card relative h-48 rounded-2xl overflow-hidden border-2 border-transparent transition-all duration-500"
+                  <label key={scent.id} style={{ display: "block", position: "relative", cursor: "pointer" }}>
+                    <input type="radio" name="favorite_scent" value={scent.id}
+                      checked={selectedScent === scent.id} onChange={() => setSelectedScent(scent.id)}
+                      className="sr-only custom-radio" />
+                    <div className="selection-card"
                       style={{
+                        position: "relative",
+                        height: "clamp(100px, 18vh, 200px)",
+                        borderRadius: "clamp(12px, 2vw, 20px)",
+                        overflow: "hidden",
+                        border: "2px solid transparent",
                         backgroundImage: `url('${scent.image}')`,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                         boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
-                      }}
-                    >
-                      {/* Dark overlay */}
-                      <div
-                        className="card-overlay absolute inset-0 transition-colors duration-500"
-                        style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
-                      />
-                      {/* Content */}
-                      <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                        <div className="flex justify-between items-end">
+                        transition: "all 0.5s",
+                      }}>
+                      <div className="card-overlay" style={{ position: "absolute", inset: 0, backgroundColor: "rgba(0,0,0,0.6)", transition: "background-color 0.5s" }} />
+                      <div style={{ position: "absolute", inset: 0, padding: "clamp(12px, 2.5vw, 24px)", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
                           <div>
-                            <h4 className="text-white text-2xl font-bold mb-1">{scent.label}</h4>
-                            <p className="text-sm leading-snug max-w-[80%]" style={{ color: "rgba(255,255,255,0.7)" }}>
-                              {scent.description}
-                            </p>
+                            <h4 style={{ color: "white", fontSize: "clamp(16px, 3vw, 26px)", fontWeight: 700, marginBottom: "clamp(2px, 0.5vw, 6px)" }}>{scent.label}</h4>
+                            <p style={{ fontSize: "clamp(10px, 1.5vw, 14px)", lineHeight: 1.4, color: "rgba(255,255,255,0.7)", maxWidth: "80%" }}>{scent.description}</p>
                           </div>
-                          <span className={`material-symbols-outlined text-3xl ${scent.iconColor}`}>
-                            {scent.icon}
-                          </span>
+                          <span className={`material-symbols-outlined ${scent.iconColor}`} style={{ fontSize: "clamp(22px, 4vw, 36px)" }}>{scent.icon}</span>
                         </div>
                       </div>
-                      {/* Check badge */}
-                      <div
-                        className="check-badge absolute top-4 right-4 rounded-full p-1 opacity-0 scale-50 transition-all duration-300"
-                        style={{ backgroundColor: "#b8f568" }}
-                      >
-                        <span className="material-symbols-outlined text-lg block" style={{ color: "#112000" }}>
-                          check
-                        </span>
+                      <div className="check-badge" style={{ position: "absolute", top: "clamp(8px, 1.5vw, 16px)", right: "clamp(8px, 1.5vw, 16px)", borderRadius: "50%", padding: "4px", opacity: 0, transform: "scale(0.5)", transition: "all 0.3s", backgroundColor: "#b8f568" }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: "clamp(14px, 2.5vw, 20px)", display: "block", color: "#112000" }}>check</span>
                       </div>
                     </div>
                   </label>
@@ -354,38 +288,19 @@ function SurveyForm() {
 
             {/* Error */}
             {error && (
-              <div
-                className="rounded-xl px-4 py-3 text-sm"
-                style={{ backgroundColor: "rgba(186,26,26,0.15)", border: "1px solid rgba(186,26,26,0.4)", color: "#ff8a80" }}
-              >
+              <div style={{ borderRadius: "12px", padding: "clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 18px)", fontSize: "clamp(12px, 1.8vw, 14px)", backgroundColor: "rgba(186,26,26,0.15)", border: "1px solid rgba(186,26,26,0.4)", color: "#ff8a80" }}>
                 {error}
               </div>
             )}
 
             {/* Submit */}
-            <div className="pt-2">
-              <button
-                type="submit"
-                disabled={loading}
-                className="glow-button w-full py-5 px-8 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{
-                  background: "linear-gradient(90deg, #fd9924, #b8f568)",
-                  color: "#112000",
-                }}
-              >
-                <span className="tracking-tight">
-                  {loading ? "ACTIVATING..." : "ACTIVATE MY SCENT"}
-                </span>
-                {!loading && (
-                  <span className="material-symbols-outlined text-2xl" style={{ animation: "pulse 2s infinite" }}>
-                    bolt
-                  </span>
-                )}
+            <div style={{ paddingTop: "clamp(4px, 1vw, 10px)" }}>
+              <button type="submit" disabled={loading} className="glow-button"
+                style={{ width: "100%", padding: "clamp(14px, 2.5vw, 22px) clamp(20px, 4vw, 36px)", borderRadius: "clamp(12px, 2vw, 20px)", fontWeight: 700, fontSize: "clamp(14px, 2.2vw, 20px)", display: "flex", alignItems: "center", justifyContent: "center", gap: "clamp(6px, 1vw, 12px)", background: "linear-gradient(90deg, #fd9924, #b8f568)", color: "#112000", border: "none", cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.5 : 1, transition: "all 0.3s" }}>
+                <span style={{ letterSpacing: "-0.02em" }}>{loading ? "ACTIVATING..." : "ACTIVATE MY SCENT"}</span>
+                {!loading && <span className="material-symbols-outlined" style={{ fontSize: "clamp(18px, 3vw, 28px)", animation: "pulse 2s infinite" }}>bolt</span>}
               </button>
-              <p
-                className="text-center text-[10px] uppercase tracking-widest mt-6"
-                style={{ color: "rgba(255,255,255,0.25)" }}
-              >
+              <p style={{ textAlign: "center", fontSize: "clamp(8px, 1.1vw, 10px)", textTransform: "uppercase", letterSpacing: "0.15em", marginTop: "clamp(12px, 2.5vw, 24px)", color: "rgba(255,255,255,0.25)" }}>
                 Secured via ScentVibe Encrypted Vibe Protocol
               </p>
             </div>
@@ -393,37 +308,29 @@ function SurveyForm() {
         </div>
       </main>
 
-      {/* Consent Notice */}
-      <div className="max-w-xl mx-auto px-6 pb-8 text-center">
-        <p className="text-[10px] leading-relaxed" style={{ color: "rgba(255,255,255,0.3)" }}>
+      {/* Consent */}
+      <div style={{ maxWidth: "clamp(320px, 90vw, 680px)", margin: "0 auto", padding: "0 clamp(16px, 4vw, 32px) clamp(16px, 3vw, 32px)", textAlign: "center" }}>
+        <p style={{ fontSize: "clamp(8px, 1.1vw, 11px)", lineHeight: 1.6, color: "rgba(255,255,255,0.3)" }}>
           By submitting this form you consent to the collection and processing of your personal information
-          (name and age) in accordance with the Protection of Personal Information Act (POPIA), Act 4 of 2013.
-          Your data is collected solely for the purpose of this survey and will not be shared with third parties
-          without your consent. You may request access to or deletion of your information at any time.
+          in accordance with POPIA (Act 4 of 2013). Your data is collected solely for this survey and will
+          not be shared without your consent.
         </p>
       </div>
 
-      {/* Bottom Navigation — Activate only */}
-      <nav
-        className="fixed bottom-0 left-0 w-full z-50 flex justify-center items-center px-4 py-4 rounded-t-[32px]"
-        style={{
-          backgroundColor: "rgba(14,17,17,0.92)",
-          backdropFilter: "blur(20px)",
-          borderTop: "1px solid rgba(255,255,255,0.05)",
-        }}
-      >
-        <button
-          type="submit"
-          form="survey-form"
-          className="flex flex-col items-center justify-center rounded-2xl px-10 py-3 transition-all active:scale-90"
-          style={{
-            backgroundColor: "#b8f568",
-            color: "#112000",
-            boxShadow: "0 0 20px rgba(184,245,104,0.3)",
-          }}
-        >
-          <span className="material-symbols-outlined mb-0.5">bolt</span>
-          <span className="text-[10px] font-bold uppercase tracking-wider">Activate</span>
+      {/* Bottom nav */}
+      <nav style={{
+        position: "fixed", bottom: 0, left: 0, width: "100%", zIndex: 50,
+        display: "flex", justifyContent: "center", alignItems: "center",
+        padding: "clamp(10px, 2vw, 18px) clamp(16px, 4vw, 32px)",
+        borderRadius: "clamp(20px, 4vw, 36px) clamp(20px, 4vw, 36px) 0 0",
+        backgroundColor: "rgba(14,17,17,0.92)",
+        backdropFilter: "blur(20px)",
+        borderTop: "1px solid rgba(255,255,255,0.05)",
+      }}>
+        <button type="submit" form="survey-form"
+          style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderRadius: "clamp(12px, 2vw, 18px)", padding: "clamp(8px, 1.5vw, 14px) clamp(28px, 6vw, 56px)", backgroundColor: "#b8f568", color: "#112000", border: "none", cursor: "pointer", boxShadow: "0 0 20px rgba(184,245,104,0.3)", transition: "all 0.2s" }}>
+          <span className="material-symbols-outlined" style={{ fontSize: "clamp(18px, 3vw, 26px)", marginBottom: "2px" }}>bolt</span>
+          <span style={{ fontSize: "clamp(8px, 1.2vw, 11px)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em" }}>Activate</span>
         </button>
       </nav>
     </div>
