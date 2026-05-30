@@ -1,6 +1,5 @@
 "use client";
-import { useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
 import { resolveLocation } from "@/lib/locations";
 
 const SCENTS = [
@@ -34,9 +33,15 @@ const SCENTS = [
 ];
 
 function SurveyForm() {
-  const searchParams = useSearchParams();
-  const locSlug = searchParams.get("loc");
-  const locationMeta = resolveLocation(locSlug);
+  const [locSlug, setLocSlug] = useState(null);
+  const [locationMeta, setLocationMeta] = useState(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("loc");
+    setLocSlug(slug);
+    setLocationMeta(resolveLocation(slug));
+  }, []);
 
   const [selectedScent, setSelectedScent] = useState("Summer Rain");
   const [fullName, setFullName] = useState("");
@@ -405,9 +410,5 @@ function SurveyForm() {
 }
 
 export default function SurveyPage() {
-  return (
-    <Suspense fallback={<div style={{ backgroundColor: "#0e1111", minHeight: "100vh" }} />}>
-      <SurveyForm />
-    </Suspense>
-  );
+  return <SurveyForm />;
 }
