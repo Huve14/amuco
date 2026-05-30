@@ -14,11 +14,20 @@
   box-sizing: border-box;
 }
 
+html {
+  /* Fluid base font: scales from 14px on small screens to 18px on large */
+  font-size: clamp(14px, 1.8vw, 18px);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   background-color: #0e1111;
   color: #f8f9fa;
   font-family: "Plus Jakarta Sans", sans-serif;
-  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 ::selection {
