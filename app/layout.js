@@ -19,17 +19,6 @@ export default function RootLayout({ children }) {
         <meta httpEquiv="cache-control" content="no-cache, no-store, must-revalidate" />
         <meta httpEquiv="pragma" content="no-cache" />
         <meta httpEquiv="expires" content="0" />
-        {/* Auto-correct browser zoom so the page always fills the screen */}
-        <script dangerouslySetInnerHTML={{ __html: `
-          (function() {
-            try {
-              var zoom = window.outerWidth / window.innerWidth;
-              if (zoom && zoom < 0.98) {
-                document.documentElement.style.zoom = zoom;
-              }
-            } catch(e) {}
-          })();
-        `}} />
         <link
           href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;0,800;1,800&display=swap"
           rel="stylesheet"
