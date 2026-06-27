@@ -2,15 +2,57 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { LOCATIONS } from "@/lib/locations";
+import { supabase } from "@/lib/supabase";
+
+const VALID_SCENTS = ["Summer Rain", "Shisanyama", "Amagwinya"];
 
 const SCENT_META = {
-  "Summer Rain":                   { emoji: "🌧️", color: "#60a5fa", bg: "rgba(96,165,250,0.15)" },
-  "Shisanyama":                    { emoji: "🔥", color: "#fd9924", bg: "rgba(253,153,36,0.15)" },
-  "Amagwinya":                      { emoji: "🥟", color: "#b8f568", bg: "rgba(184,245,104,0.15)" },
+  "Summer Rain":                   { emoji: "\u{1F327}️", color: "#60a5fa", bg: "rgba(96,165,250,0.15)" },
+  "Shisanyama":                    { emoji: "\u{1F525}", color: "#fd9924", bg: "rgba(253,153,36,0.15)" },
+  "Amagwinya":                      { emoji: "\u{1F95F}", color: "#b8f568", bg: "rgba(184,245,104,0.15)" },
 };
 
 const RANK_ICONS = ["emoji_events", "workspace_premium", "military_tech"];
 const RANK_COLORS = ["#fbbf24", "#94a3b8", "#cd7c2f"];
+
+function buildStats(data, today) {
+  const total = data.length;
+
+  const scentTally = VALID_SCENTS.reduce((acc, s) => ({ ...acc, [s]: 0 }), {});
+  data.forEach((r) => { if (scentTally[r.favorite_scent] !== undefined) scentTally[r.favorite_scent]++; });
+
+  const ageBuckets = { "Under 18": 0, "18–24": 0, "25–34": 0, "35–44": 0, "45+": 0 };
+  data.forEach((r) => {
+    const a = r.age;
+    if (a < 18) ageBuckets["Under 18"]++;
+    else if (a <= 24) ageBuckets["18–24"]++;
+    else if (a <= 34) ageBuckets["25–34"]++;
+    else if (a <= 44) ageBuckets["35–44"]++;
+    else ageBuckets["45+"]++;
+  });
+
+  const avgAge = total > 0
+    ? Math.round(data.reduce((sum, r) => sum + (r.age || 0), 0) / total)
+    : 0;
+
+  const todayCount = data.filter((r) => new Date(r.created_at).toDateString() === today).length;
+
+  const byDay = {};
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    byDay[d.toLocaleDateString("en-ZA", { day: "numeric", month: "short" })] = 0;
+  }
+  data.forEach((r) => {
+    const label = new Date(r.created_at).toLocaleDateString("en-ZA", { day: "numeric", month: "short" });
+    if (label in byDay) byDay[label]++;
+  });
+
+  const leadingScent = Object.entries(scentTally).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
+  const recent = [...data].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 20);
+
+  return { total, avgAge, todayCount, leadingScent, scentTally, ageBuckets, byDay, recent };
+}
 
 function KpiCard({ icon, label, value, sub, accent }) {
   return (
@@ -153,26 +195,63 @@ function LocationCard({ loc, rank }) {
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
+  const [rawData, setRawData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(false);
-  const [activeTab, setActiveTab] = useState(null); // null = All Locations
+  const [activeTab, setActiveTab] = useState(null);
   const router = useRouter();
 
-  const fetchStats = useCallback((locationSlug) => {
-    setLoading(true);
-    const url = locationSlug ? `/api/admin/stats?location=${locationSlug}` : "/api/admin/stats";
-    fetch(url)
+  useEffect(() => {
+    fetch("/api/admin/stats")
       .then((r) => {
-        if (r.status === 401) { setAuthError(true); setLoading(false); return null; }
-        return r.json();
+        if (r.status === 401) {
+          setAuthError(true);
+          setLoading(false);
+          return;
+        }
+        loadData();
       })
-      .then((d) => { if (d) { setStats(d); setLoading(false); } })
       .catch(() => setLoading(false));
   }, []);
 
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("participants")
+      .select("*")
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      setLoading(false);
+      return;
+    }
+
+    setRawData(data);
+  }, []);
+
   useEffect(() => {
-    fetchStats(activeTab);
-  }, [activeTab, fetchStats]);
+    if (!rawData) return;
+
+    const today = new Date().toDateString();
+    const filteredData = activeTab && LOCATIONS[activeTab]
+      ? rawData.filter((r) => r.location === activeTab)
+      : rawData;
+
+    const mainStats = buildStats(filteredData, today);
+
+    const locationStats = Object.entries(LOCATIONS).map(([slug, meta]) => {
+      const rows = rawData.filter((r) => r.location === slug);
+      const scentTally = VALID_SCENTS.reduce((acc, s) => ({ ...acc, [s]: 0 }), {});
+      rows.forEach((r) => { if (scentTally[r.favorite_scent] !== undefined) scentTally[r.favorite_scent]++; });
+      const leadingScent = Object.entries(scentTally).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
+      const todayCount = rows.filter((r) => new Date(r.created_at).toDateString() === today).length;
+      const isLive = new Date(meta.launch) <= new Date();
+      return { slug, ...meta, total: rows.length, todayCount, leadingScent, scentTally, isLive };
+    }).sort((a, b) => b.total - a.total);
+
+    setStats({ ...mainStats, locationStats });
+    setLoading(false);
+  }, [rawData, activeTab]);
 
   async function handleLogout() {
     await fetch("/api/admin/login", { method: "DELETE" });
@@ -192,7 +271,7 @@ export default function AdminDashboard() {
     );
   }
 
-  if (loading) {
+  if (loading || !stats) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#0e1111" }}>
         <div className="text-center space-y-3">
@@ -208,7 +287,7 @@ export default function AdminDashboard() {
   const maxAge = Math.max(...ageEntries.map(([, v]) => v), 1);
   const dayEntries = Object.entries(stats.byDay);
   const maxDay = Math.max(...dayEntries.map(([, v]) => v), 1);
-  const leadingMeta = SCENT_META[stats.leadingScent] || { emoji: "🫧", color: "#b8f568" };
+  const leadingMeta = SCENT_META[stats.leadingScent] || { emoji: "\u{1FAE7}", color: "#b8f568" };
   const locationList = stats.locationStats || [];
 
   return (
@@ -330,7 +409,7 @@ export default function AdminDashboard() {
             ) : (
               <div className="space-y-5">
                 {scentEntries.sort((a, b) => b[1] - a[1]).map(([scent, count]) => {
-                  const meta = SCENT_META[scent] || { emoji: "🫧", color: "#b8f568" };
+                  const meta = SCENT_META[scent] || { emoji: "\u{1FAE7}", color: "#b8f568" };
                   return (
                     <BarRow
                       key={scent}
@@ -401,7 +480,7 @@ export default function AdminDashboard() {
           </div>
           {stats.recent.length === 0 ? (
             <div className="py-16 text-center">
-              <span className="text-4xl block mb-3">🫧</span>
+              <span className="text-4xl block mb-3">{"\u{1FAE7}"}</span>
               <p className="text-sm" style={{ color: "#c2c9b3" }}>No responses yet. Share the survey link!</p>
             </div>
           ) : (
@@ -418,7 +497,7 @@ export default function AdminDashboard() {
                 </thead>
                 <tbody>
                   {stats.recent.map((r) => {
-                    const meta = SCENT_META[r.favorite_scent] || { emoji: "🫧", color: "#b8f568" };
+                    const meta = SCENT_META[r.favorite_scent] || { emoji: "\u{1FAE7}", color: "#b8f568" };
                     const locMeta = r.location ? LOCATIONS[r.location] : null;
                     return (
                       <tr key={r.id} className="transition-colors" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
@@ -428,7 +507,7 @@ export default function AdminDashboard() {
                         <td className="px-6 py-3.5 font-medium text-white">{r.full_name}</td>
                         <td className="px-6 py-3.5" style={{ color: "#c2c9b3" }}>{r.age}</td>
                         <td className="px-6 py-3.5 text-xs" style={{ color: "#c2c9b3" }}>
-                          {r.email || r.contact_number || <span style={{ color: "rgba(255,255,255,0.2)" }}>—</span>}
+                          {r.email || r.contact_number || <span style={{ color: "rgba(255,255,255,0.2)" }}>{"—"}</span>}
                           {r.email && r.contact_number && <><br />{r.contact_number}</>}
                         </td>
                         <td className="px-6 py-3.5">
@@ -449,7 +528,7 @@ export default function AdminDashboard() {
                               {locMeta.name}
                             </span>
                           ) : (
-                            <span className="text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>—</span>
+                            <span className="text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>{"—"}</span>
                           )}
                         </td>
                         <td className="px-6 py-3.5 text-xs" style={{ color: "#c2c9b3" }}>
