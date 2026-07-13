@@ -3,15 +3,12 @@ import { AppShell } from './components/AppShell';
 import { HelpPage } from './components/HelpPage';
 import { InfoPage } from './components/InfoPage';
 import { LandingPage } from './components/LandingPage';
-import { PopiaPage } from './components/PopiaPage';
 
-export type AppPage = 'home' | 'help' | 'info' | 'popia';
+export type AppPage = 'home' | 'help' | 'info';
 
 function pageFromHash(): AppPage {
-  const hash = window.location.hash.replace(/^#\/?/, '').split(/[?&]/)[0];
-  if (hash === 'help') return 'help';
-  if (hash === 'info') return 'info';
-  if (hash === 'popia') return 'popia';
+  if (window.location.hash === '#help') return 'help';
+  if (window.location.hash === '#info') return 'info';
   return 'home';
 }
 
@@ -21,22 +18,12 @@ export function App() {
   useEffect(() => {
     const handleHashChange = () => setPage(pageFromHash());
     window.addEventListener('hashchange', handleHashChange);
-    window.addEventListener('popstate', handleHashChange);
-    return () => {
-      window.removeEventListener('hashchange', handleHashChange);
-      window.removeEventListener('popstate', handleHashChange);
-    };
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
-
-  useEffect(() => {
-    if (page !== 'home') {
-      window.scrollTo({ behavior: 'smooth', top: 0 });
-    }
-  }, [page]);
 
   function navigate(pageName: AppPage) {
     setPage(pageName);
-    const nextHash = pageName === 'help' ? '#help' : pageName === 'info' ? '#info' : pageName === 'popia' ? '#popia' : '#event';
+    const nextHash = pageName === 'help' ? '#help' : pageName === 'info' ? '#info' : '#event';
     if (window.location.hash !== nextHash) {
       window.history.pushState(null, '', nextHash);
     }
@@ -48,10 +35,8 @@ export function App() {
         <HelpPage onBack={() => navigate('home')} />
       ) : page === 'info' ? (
         <InfoPage onBack={() => navigate('home')} />
-      ) : page === 'popia' ? (
-        <PopiaPage onBack={() => navigate('home')} />
       ) : (
-        <LandingPage onOpenHelp={() => navigate('help')} onOpenInfo={() => navigate('info')} onOpenPopia={() => navigate('popia')} />
+        <LandingPage onOpenHelp={() => navigate('help')} onOpenInfo={() => navigate('info')} />
       )}
     </AppShell>
   );

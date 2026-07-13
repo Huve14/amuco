@@ -4,15 +4,27 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import type { LucideIcon } from 'lucide-react';
 import {
   ArrowRight,
+  BadgeCheck,
   CalendarDays,
   CheckCircle2,
+  Clock3,
   Database,
+  Flag,
   Lock,
+  MailCheck,
   ReceiptText,
+  ShieldCheck,
   Sparkles,
+  Trophy,
 } from 'lucide-react';
 import m2mWhiteLogo from '../assets/m2m-white.png';
 import { isSupabaseConfigured } from '../lib/supabase';
+
+type IconCard = {
+  title: string;
+  description: string;
+  icon: LucideIcon;
+};
 
 type HeroStar = {
   id: number;
@@ -37,7 +49,6 @@ type RegistrationFormState = {
   giftingPacks: number;
   activationNotes: string;
   communicationConsent: boolean;
-  popiaGuestConsent: boolean;
   termsAccepted: boolean;
 };
 
@@ -58,7 +69,6 @@ type SubmittedRegistration = {
       total_amount: number;
       terms_accepted: boolean;
       consent_communication: boolean;
-      consent_popia_guest_booking: boolean;
       player_form_token: string;
     };
     booking_line_items: Array<{
@@ -109,7 +119,6 @@ const registrationDefaults: RegistrationFormState = {
   giftingPacks: 4,
   activationNotes: '',
   communicationConsent: true,
-  popiaGuestConsent: false,
   termsAccepted: false,
 };
 
@@ -177,6 +186,32 @@ const glowHeroStars: HeroStar[] = Array.from({ length: 10 }, (_, index) => ({
   duration: `${(4 + (index * 0.3) % 5).toFixed(2)}s`,
   color: ['#ffffff', '#dcddde', '#ed1c24', '#ffffff', '#dcddde'][index % 5],
 }));
+
+const platformStack = [
+  'FastAPI service layer',
+  'Supabase Postgres, Auth, Storage, and Realtime',
+  'SQLAlchemy, Alembic, and Pydantic v2',
+  'Registration comms for email and WhatsApp',
+  'Invoice, print, and sponsor-asset export workflows',
+];
+
+const eventDayTools: IconCard[] = [
+  {
+    title: 'Guest arrival',
+    description: 'Mark arrivals, manage substitutions, and keep the front-of-house experience smooth from the first hello.',
+    icon: BadgeCheck,
+  },
+  {
+    title: 'On-course moments',
+    description: 'Publish fourballs, sponsor holes, branded touchpoints, and activation cues for the team on the ground.',
+    icon: Flag,
+  },
+  {
+    title: 'Experience inventory',
+    description: 'Track gifting, carts, print runs, dietary notes, signage, scorecards, and the details guests remember.',
+    icon: Trophy,
+  },
+];
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat('en-ZA', {
@@ -274,7 +309,6 @@ function buildRegistrationPayload(form: RegistrationFormState): SubmittedRegistr
         total_amount: totals.total,
         terms_accepted: form.termsAccepted,
         consent_communication: form.communicationConsent,
-        consent_popia_guest_booking: form.popiaGuestConsent,
         player_form_token: playerFormToken,
       },
       booking_line_items: bookingLineItems,
@@ -303,10 +337,9 @@ function buildRegistrationPayload(form: RegistrationFormState): SubmittedRegistr
 type LandingPageProps = {
   onOpenHelp: () => void;
   onOpenInfo: () => void;
-  onOpenPopia: () => void;
 };
 
-export function LandingPage({ onOpenHelp, onOpenInfo, onOpenPopia }: LandingPageProps) {
+export function LandingPage({ onOpenHelp, onOpenInfo }: LandingPageProps) {
   return (
     <>
       <section
@@ -345,14 +378,6 @@ export function LandingPage({ onOpenHelp, onOpenInfo, onOpenPopia }: LandingPage
                 className="inline-flex items-center gap-2 rounded-full border border-cream-100/40 px-5 py-3 text-sm font-bold text-cream-100 hover:bg-cream-100/10"
               >
                 View command centre info
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </button>
-              <button
-                type="button"
-                onClick={onOpenPopia}
-                className="inline-flex items-center gap-2 rounded-full border border-cream-100/40 px-5 py-3 text-sm font-bold text-cream-100 hover:bg-cream-100/10"
-              >
-                POPIA compliance
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </button>
               <a
@@ -403,6 +428,75 @@ export function LandingPage({ onOpenHelp, onOpenInfo, onOpenPopia }: LandingPage
         </div>
       </section>
 
+      <section id="players" className="relative overflow-hidden bg-cream-50 py-14">
+        <div className="arrow-field arrow-field-red" />
+        <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+            <div>
+              <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-navy-700">Event day</p>
+              <h2 className="display mt-3 max-w-[22rem] text-4xl leading-tight text-ink sm:max-w-none sm:text-5xl">
+                The field team sees the details that make the day feel effortless.
+              </h2>
+            </div>
+            <div id="event-day" className="grid gap-4 sm:grid-cols-3">
+              {eventDayTools.map((tool) => {
+                const Icon = tool.icon;
+                return (
+                  <article key={tool.title} className="rounded-lg border border-cream-300 bg-cream-100 p-5">
+                    <Icon className="h-6 w-6 text-navy-700" aria-hidden="true" />
+                    <h3 className="mt-4 font-extrabold text-ink">{tool.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-ink-soft">{tool.description}</p>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sponsors" className="relative overflow-hidden border-y border-cream-300 bg-cream-200 py-14">
+        <div className="arrow-field arrow-field-navy" />
+        <div className="relative mx-auto grid max-w-7xl gap-8 px-5 lg:grid-cols-[1fr_1fr] lg:px-8">
+          <div>
+            <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-navy-700">Sponsor desk</p>
+            <h2 className="display mt-3 max-w-[22rem] text-4xl leading-tight text-ink sm:max-w-none sm:text-5xl">
+              Sponsor commitments sit beside print, gifting, and activation needs.
+            </h2>
+            <p className="mt-5 max-w-[22rem] text-sm leading-6 text-ink-soft sm:max-w-xl">
+              M2M’s services span brand activations, events, promo gifting,
+              printing, digital content, and innovation. The registration site keeps
+              those moving parts close to every booking.
+            </p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <MiniPanel icon={MailCheck} title="Brand assets" body="Logo files, sponsor signage, gifting notes, and print requirements stay attached to the registration." />
+            <MiniPanel icon={ReceiptText} title="Invoices" body="Finance tracks issued invoices, due dates, payment status, and sponsor package totals." />
+            <MiniPanel icon={ShieldCheck} title="Experience quality" body="Every event-day commitment stays visible so the guest experience feels sharp and intentional." />
+            <MiniPanel icon={Clock3} title="Deadlines" body="Payment windows, player cut-offs, print queues, and activation prep can be scheduled together." />
+          </div>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden bg-navy-900 py-14 text-cream-100">
+        <div className="arrow-field arrow-field-right" />
+        <div className="relative mx-auto grid max-w-7xl gap-8 px-5 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+          <div>
+            <img src={m2mWhiteLogo} alt="M2M" className="mb-8 h-10 w-auto" />
+            <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-signal-300">Platform stack</p>
+            <h2 className="display mt-3 max-w-[22rem] text-4xl leading-tight text-cream-100 sm:max-w-none sm:text-5xl">
+              A registration layer for M2M’s full-service event machine.
+            </h2>
+          </div>
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {platformStack.map((item) => (
+              <li key={item} className="flex items-start gap-3 rounded-lg border border-cream-100/10 bg-cream-100/8 p-4 text-sm text-cream-100/76">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-signal-300" aria-hidden="true" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
     </>
   );
 }
@@ -598,10 +692,10 @@ function RegistrationHandoff() {
         >
           <h2 className="handoff-title text-[clamp(2.95rem,11vw,5.25rem)] font-extrabold leading-[1.28] sm:text-[clamp(4.1rem,7.6vw,6.8rem)] sm:leading-[1.22]">
             <motion.span className="handoff-title-white mb-3 block sm:mb-4" style={{ filter: textFilter }}>
-              TRACK THE SCORE,
+              Track the score,
             </motion.span>
             <motion.span className="handoff-title-silver block pb-5" style={{ filter: textFilter }}>
-              NOT HOW YOU GOT THERE
+              Not how you got there
             </motion.span>
           </h2>
         </motion.div>
@@ -899,30 +993,6 @@ function RegistrationSection() {
                 <input
                   required
                   type="checkbox"
-                  checked={form.popiaGuestConsent}
-                  onChange={(event) => updateField('popiaGuestConsent', event.target.checked)}
-                  className="mt-1 h-4 w-4 accent-signal-300"
-                />
-                <span>
-                  I confirm guest/player consent for booking and event administration.
-                  {' '}
-                  <button
-                    type="button"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      onOpenPopia();
-                    }}
-                    className="font-extrabold text-signal-300 hover:text-signal-500"
-                  >
-                    Read POPIA compliance.
-                  </button>
-                </span>
-              </label>
-              <label className="flex items-start gap-3 text-sm font-semibold leading-6 text-ink-soft">
-                <input
-                  required
-                  type="checkbox"
                   checked={form.termsAccepted}
                   onChange={(event) => updateField('termsAccepted', event.target.checked)}
                   className="mt-1 h-4 w-4 accent-signal-300"
@@ -994,21 +1064,6 @@ function QuantityField({
   onChange: (value: string) => void;
   value: number;
 }) {
-  const [draftValue, setDraftValue] = useState(String(value));
-  const [isFocused, setIsFocused] = useState(false);
-
-  useEffect(() => {
-    if (!isFocused) {
-      setDraftValue(String(value));
-    }
-  }, [isFocused, value]);
-
-  function commitValue(nextValue: string) {
-    const normalizedValue = String(clampNumber(Number(nextValue), min, max ?? 9999));
-    setDraftValue(normalizedValue);
-    onChange(normalizedValue);
-  }
-
   return (
     <label className="grid gap-2">
       <span className="text-xs font-extrabold uppercase tracking-[0.12em] text-ink-soft">{label}</span>
@@ -1017,19 +1072,8 @@ function QuantityField({
         inputMode="numeric"
         min={min}
         max={max}
-        value={draftValue}
-        onBlur={() => {
-          setIsFocused(false);
-          commitValue(draftValue === '' ? String(min) : draftValue);
-        }}
-        onChange={(event) => {
-          const nextValue = event.target.value;
-          setDraftValue(nextValue);
-          if (nextValue !== '') {
-            onChange(nextValue);
-          }
-        }}
-        onFocus={() => setIsFocused(true)}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
         className="h-12 rounded-lg border border-cream-300 bg-cream-50 px-4 text-sm font-extrabold text-ink outline-none focus:border-signal-300"
       />
     </label>
@@ -1047,5 +1091,15 @@ function Detail({ icon: Icon, label, value }: { icon: LucideIcon; label: string;
         <span className="mt-1 block text-sm font-bold leading-5 text-ink">{value}</span>
       </span>
     </div>
+  );
+}
+
+function MiniPanel({ icon: Icon, title, body }: { icon: LucideIcon; title: string; body: string }) {
+  return (
+    <article className="rounded-lg border border-cream-300 bg-cream-50 p-5">
+      <Icon className="h-5 w-5 text-navy-700" aria-hidden="true" />
+      <h3 className="mt-4 text-base font-extrabold text-ink">{title}</h3>
+      <p className="mt-2 text-sm leading-6 text-ink-soft">{body}</p>
+    </article>
   );
 }
