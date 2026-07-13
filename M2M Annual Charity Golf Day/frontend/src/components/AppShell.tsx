@@ -12,9 +12,6 @@ type AppShellProps = {
 const navItems = [
   { label: 'Event', sectionId: 'event' },
   { label: 'Register', sectionId: 'register' },
-  { label: 'Sponsors', sectionId: 'sponsors' },
-  { label: 'Players', sectionId: 'players' },
-  { label: 'Event day', sectionId: 'event-day' },
 ];
 
 function scrollHomeSection(sectionId: string, onNavigate: (page: AppPage) => void) {
@@ -64,6 +61,13 @@ export function AppShell({ children, currentPage, onNavigate }: AppShellProps) {
             </button>
             <button
               type="button"
+              onClick={() => onNavigate('popia')}
+              className={currentPage === 'popia' ? 'text-signal-300' : 'hover:text-navy-700'}
+            >
+              POPIA
+            </button>
+            <button
+              type="button"
               onClick={() => onNavigate('help')}
               className={currentPage === 'help' ? 'text-signal-300' : 'hover:text-navy-700'}
             >
@@ -73,11 +77,11 @@ export function AppShell({ children, currentPage, onNavigate }: AppShellProps) {
 
           <button
             type="button"
-            onClick={() => onNavigate(currentPage === 'info' ? 'help' : 'info')}
+            onClick={() => onNavigate(currentPage === 'popia' ? 'help' : 'popia')}
             className="hidden items-center gap-2 rounded-full border border-signal-300 bg-cream-50 px-3 py-2 text-xs font-bold text-navy-700 sm:flex"
           >
             <Activity className="h-4 w-4 text-signal-300" aria-hidden="true" />
-            {currentPage === 'info' ? 'Help' : 'Info'}
+            {currentPage === 'popia' ? 'Help' : 'POPIA'}
           </button>
         </div>
       </header>
